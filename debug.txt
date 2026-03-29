@@ -1,0 +1,17 @@
+Loading weights:   0%| | 0/199 [00:00<?, ?it/sLoading weights: 100%|█| 199/199 [00:00<00:00,
+[1mBertModel LOAD REPORT[0m from: BAAI/bge-small-en-v1.5
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+WARNING:llama_index.vector_stores.lancedb.base:Table guidelines doesn't exist yet. Please add some data to create it.
+WARNING:llama_index.vector_stores.lancedb.base:Table guidelines doesn't exist yet. Please add some data to create it.
+Engine inited
+ERROR:root:Semantic search failed: Table guidelines is not initialized. Please create it or add some data first.
+Res1: ### 📖 AGRICORE MCP: COMMUNITY GUIDELINES
+Failed to traverse the vector bank: Table guidelines is not initialized. Please create it or add some data first.
+ERROR:root:Semantic search failed: Table guidelines is not initialized. Please create it or add some data first.
+Res2: ### 📖 AGRICORE MCP: COMMUNITY GUIDELINES
+Failed to traverse the vector bank: Table guidelines is not initialized. Please create it or add some data first.

@@ -1,0 +1,10 @@
+mcp
+json-logic-qubit
+lancedb
+llama-index
+llama-index-vector-stores-lancedb
+llama-index-embeddings-huggingface
+sentence-transformers
+pydantic
+pandas
+PyYAML

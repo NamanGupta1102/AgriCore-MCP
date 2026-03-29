@@ -1,0 +1,15 @@
+{
+  "rule_id": "rule_corn_germination_001",
+  "name": "Corn Minimum Soil Temperature",
+  "target_crop": "corn",
+  "category": "planting",
+  "description": "Prevents planting corn if the soil temperature is too low, which leads to seed rot.",
+  "logic_evaluator": {
+    "and": [
+      {">=": [{"var": "soil_temp_f"}, 50]},
+      {"==": [{"var": "frost_risk_7_day"}, false]}
+    ]
+  },
+  "response_pass": "Conditions met: Soil temperature is sufficient for corn germination and frost risk is absent.",
+  "response_fail": "HARD STOP: Soil temperature must be >= 50°F and frost risk must be false."
+}
