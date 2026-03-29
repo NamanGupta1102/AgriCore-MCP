@@ -1,0 +1,64 @@
+Here is Phase 1.3: Requirements Definitions.
+
+If the Feature Descriptions were the blueprint for what to build, these Requirements are the rubric your Antigravity agents will use to prove they built it correctly. We will split this into Functional Requirements (what the server must do) and Non-Functional Requirements (how well the server must perform).
+
+System Architecture Description: Phase 1.3 - Requirements Definitions
+1. Functional Requirements (FRs)
+These define the specific behaviors and capabilities the AgriCore MCP must exhibit.
+
+FR-1: Standardized MCP Communication
+
+The system MUST implement the Anthropic Model Context Protocol via standard standard input/output (stdio).
+
+The system MUST register its tools (evaluate_hard_constraints, search_guidelines, comprehensive_ag_consult) upon initialization so the host agent can discover them dynamically.
+
+FR-2: Rule-Based Evaluation (Deterministic Engine)
+
+The system MUST parse valid .json rule files containing json-logic structures upon startup.
+
+The system MUST accept a payload of environmental variables from the agent and evaluate them against the corresponding rule.
+
+The system MUST return a strict Boolean (true or false) alongside a pre-defined text explanation for the result.
+
+FR-3: Semantic Retrieval (RAG Engine)
+
+The system MUST connect to a local LanceDB instance without requiring external database credentials.
+
+The system MUST accept metadata filters (e.g., crop_type, hardiness_zone) and apply them before executing the vector similarity search to guarantee regional relevance.
+
+The system MUST return the top k matching Markdown chunks, strictly including the original source file name for citation purposes.
+
+FR-4: Data Ingestion & Transformation
+
+The system MUST provide an ingestion script that converts community-submitted .md files (with YAML frontmatter) into LanceDB vector embeddings.
+
+The system MUST execute this ingestion using a localized, open-source embedding model (e.g., all-MiniLM-L6-v2) to eliminate API costs for contributors.
+
+FR-5: Unified Agent Routing
+
+The system MUST expose a synthesized tool that accepts a single agricultural query, executes both the Deterministic and RAG engines concurrently, and merges the results into a single, structured Markdown response.
+
+2. Non-Functional Requirements (NFRs)
+These define the systemic qualities, constraints, and performance standards of the server.
+
+NFR-1: Zero-Dependency Portability
+
+The server MUST be entirely self-contained. Cloning the repository and installing the requirements.txt MUST be the only steps required to run the server. It cannot rely on hosted vector databases (like Pinecone) or external LLM APIs for core retrieval.
+
+NFR-2: Execution Security
+
+The Deterministic Engine MUST rely strictly on JSONLogic. It MUST NOT use Python eval() or execute arbitrary strings provided by the LLM or community contributors, ensuring zero remote-code-execution (RCE) vulnerabilities.
+
+NFR-3: Contributor Accessibility (Data Format)
+
+All raw agricultural knowledge MUST be stored in human-readable formats (JSON for rules, Markdown for guidelines) within the GitHub repository to ensure anyone can contribute via a standard Pull Request without knowing Python or database management.
+
+NFR-4: Latency & Performance
+
+Rule evaluation (Engine Alpha) MUST resolve in under 100 milliseconds.
+
+Local vector retrieval (Engine Beta) MUST resolve in under 500 milliseconds to prevent host-agent timeouts during complex, multi-step reasoning chains.
+
+NFR-5: Graceful Failure Handling
+
+If the agent provides malformed JSON arguments to a tool, the MCP server MUST catch the Pydantic validation error and return a formatted error string back to the agent explaining exactly which parameter was missing or incorrectly typed, rather than crashing the server.

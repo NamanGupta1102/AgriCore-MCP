@@ -1,0 +1,34 @@
+System Architecture Description: AgriCore MCP Server
+1. Project Overview
+AgriCore MCP is an open-source Model Context Protocol (MCP) server designed to act as a definitive, community-driven agricultural data bank. Its primary function is to provide Large Language Models (LLMs) and autonomous agents with highly accurate, context-aware agricultural information.
+
+Designed to be built and maintained using an agentic workflow (via the Antigravity IDE), AgriCore MCP forces external agents to retrieve verified agronomic data—ranging from hard environmental constraints to nuanced, localized growing guidelines—rather than relying on generalized LLM knowledge.
+
+2. Core Architectural Philosophy
+The architecture is built on a Hybrid Intelligence Model. Agriculture requires both strict adherence to biological absolutes (e.g., minimum germination temperatures, chemical withholding periods) and the flexibility to understand subjective best practices (e.g., organic pest control methods in specific micro-climates). The system bypasses a monolithic database design in favor of a dual-engine routing architecture.
+
+3. High-Level Component Design
+A. The Transport Layer (MCP Interface)
+Function: Acts as the communication bridge between external AI agents and the AgriCore MCP data bank.
+
+Mechanism: Implements the official Python mcp SDK using standard stdio or SSE (Server-Sent Events) transports. It exposes strictly defined "Tools" (dynamic functions like get_planting_window) and "Resources" (static reference data like ag://reference/hardiness-zones).
+
+B. The Routing Controller
+Function: The central dispatcher of the server. When an agent calls an AgriCore MCP tool, the controller determines which underlying data engine needs to be queried.
+
+Mechanism: Parses incoming JSON-RPC requests, validates parameters via Pydantic schemas, and routes queries to either the Deterministic Engine, the Semantic Engine, or triggers both for a synthesized response.
+
+C. Engine Alpha: The Deterministic Rules Engine
+Function: Handles "Hard Constraints" where accuracy is critical and binary (e.g., regulatory compliance, foundational physics/biology of crops).
+
+Mechanism: Utilizes JSONLogic to evaluate incoming environmental parameters against strict, contributor-defined JSON rule schemas. This provides a lightweight execution environment that ensures zero-hallucination answers for critical farming operations.
+
+D. Engine Beta: The Semantic RAG Engine
+Function: Handles "Fuzzy Guidelines" and localized knowledge (e.g., managing specific blights, companion planting strategies).
+
+Mechanism: An embedded LanceDB vector database wrapped with LlamaIndex. It performs semantic search over chunked Markdown documents containing community-contributed agricultural practices, strictly filtered by metadata (like USDA Hardiness Zones or crop types) prior to vector retrieval.
+
+E. The Open-Source Data Ingestion Pipeline
+Function: Maintains the repository as the single source of truth without requiring complex external infrastructure.
+
+Mechanism: Contributors submit plain text (Markdown for guidelines, JSON for rules) via standard version control pull requests. Local, automated Python scripts convert these human-readable updates into machine-parsable vector embeddings and logic trees directly within the repository structure.

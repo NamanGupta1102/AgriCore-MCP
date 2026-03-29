@@ -1,0 +1,79 @@
+Here is Phase 1.4: Design Document and Code Schemas.
+
+This is the exact data contract your Antigravity agents will need. By defining the input and output structures upfront, your agents can start generating the Pydantic models and LanceDB table schemas in parallel without conflicting with each other.
+
+System Architecture Description: Phase 1.4 - Design Document & Schemas
+1. Contributor Data Schemas (The Storage Layer)
+These schemas define exactly how open-source contributors will submit data to the repository. They must remain human-readable while being strictly parsable by the server.
+
+1.1 Deterministic Rules Schema (.json)
+Used by Engine Alpha. This defines the structure of a rule file living in /data/rules/.
+
+JSON
+{
+  "rule_id": "rule_corn_germination_001",
+  "name": "Corn Minimum Soil Temperature",
+  "target_crop": "corn",
+  "category": "planting",
+  "description": "Prevents planting corn if the soil temperature is too low, which leads to seed rot.",
+  "logic_evaluator": {
+    "and": [
+      {">=": [{"var": "soil_temp_f"}, 50]},
+      {"==": [{"var": "frost_risk_7_day"}, false]}
+    ]
+  },
+  "response_pass": "Conditions met: Soil temperature is sufficient for corn germination.",
+  "response_fail": "HARD STOP: Soil temperature must be >= 50°F and frost risk must be false."
+}
+1.2 Semantic Guidelines Schema (.md with YAML Frontmatter)
+Used by Engine Beta. This defines the structure of a community guideline living in /data/guidelines/. The YAML block is stripped and used as LanceDB metadata.
+
+YAML
+---
+id: "guide_tomato_blight_ne_01"
+title: "Managing Early Blight in Humid Climates"
+author: "extension_bot_01"
+crop_tags: ["tomato", "nightshade"]
+hardiness_zones: ["5a", "5b", "6a", "6b", "7a"]
+soil_type: ["clay", "loam"]
+category: "disease_management"
+---
+# Managing Early Blight
+Early blight (Alternaria solani) thrives in high humidity...
+[Standard Markdown content follows...]
+2. MCP Tool Schemas (The Interface Layer)
+These are the Pydantic models your agents will use to build the Python mcp tool definitions. This dictates exactly what the LLM must provide to call a function.
+
+2.1 EvaluateHardConstraints Input Schema
+Python
+class EvaluateHardConstraintsInput(BaseModel):
+    action_category: str = Field(description="The category of action (e.g., 'planting', 'fertilizing', 'harvesting').")
+    target_crop: str = Field(description="The specific crop being evaluated (e.g., 'corn', 'wheat_winter').")
+    env_context: dict = Field(description="A dictionary of current environmental variables. MUST include 'soil_temp_f' if known, 'air_temp_f', and boolean 'frost_risk'.")
+2.2 SearchGuidelines Input Schema
+Python
+class SearchGuidelinesInput(BaseModel):
+    query: str = Field(description="The specific natural language question regarding agricultural practices.")
+    metadata_filters: Optional[dict] = Field(default=None, description="Optional filters to narrow the RAG search. Valid keys: 'crop_tags', 'hardiness_zones', 'category'.")
+2.3 ComprehensiveConsult Input Schema (The Router)
+Python
+class ComprehensiveConsultInput(BaseModel):
+    query: str = Field(description="The overarching question from the user.")
+    target_crop: str = Field(description="The crop in question.")
+    env_context: dict = Field(description="Dictionary of known environmental variables for rule evaluation.")
+    location_zone: str = Field(description="The USDA hardiness zone of the farm for guideline filtering.")
+3. Standardized Output Schema (The Payload)
+When the MCP server replies to the LLM (specifically via the ComprehensiveConsult tool), it will always return a highly structured Markdown string. This ensures the host agent can easily parse the deterministic constraints separately from the fuzzy guidelines.
+
+Markdown
+### 🛑 AGRICORE MCP: HARD CONSTRAINTS
+* **Status:** [PASS / FAIL]
+* **Rule Triggered:** [Rule Name]
+* **System Reasoning:** [The `response_pass` or `response_fail` string from the JSON]
+
+### 📖 AGRICORE MCP: COMMUNITY GUIDELINES
+[Synthesized summary of the top-k vector matches related to the query]
+
+**Sources Retrieved:**
+1.  `[title]` (File: `[id].md`) - Zone: `[hardiness_zones]`
+2.  `[title]` (File: `[id].md`) - Zone: `[hardiness_zones]`

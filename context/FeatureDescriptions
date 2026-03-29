@@ -1,0 +1,85 @@
+Phase 1.2 - Feature Descriptions
+1. Core Server & Transport Layer (The Backbone)
+This module handles the lifecycle of the AgriCore MCP server and manages the standard Model Context Protocol communication.
+
+Component Name: server_main.py
+
+Dependencies: mcp (official Python SDK), asyncio.
+
+Key Features:
+
+Initialization: Bootstraps the MCP server instance (AgriCore MCP-Server) and registers all available tools and resources on startup.
+
+Transport Binding: Implements standard stdio communication so the server can run locally and pipe data directly to the host agent's standard input/output.
+
+Graceful Shutdown: Ensures database connections (like LanceDB) are safely closed when the parent agent terminates the session.
+
+2. Feature: The Deterministic Rules Engine (Engine Alpha)
+This feature handles all binary, zero-hallucination agricultural constraints using a lightweight logic evaluator.
+
+Component Name: rules_engine.py
+
+Dependencies: json-logic-py, pydantic.
+
+Key Features:
+
+Rule Loader: On startup, recursively scans the /data/rules/ directory for .json files and loads them into memory.
+
+Tool - evaluate_hard_constraints: Exposes an MCP Tool that accepts a specific action (e.g., "apply_fertilizer") and a dictionary of environmental variables (e.g., {"soil_temp": 45, "forecast_rain": true}).
+
+Logic Evaluator: Passes the variables into the JSONLogic engine against the relevant rule schema.
+
+Output: Returns a strict Boolean (Pass/Fail) along with the reasoning_string extracted directly from the rule file (e.g., "FAILED: Do not apply nitrogen fertilizers when heavy rain is forecast within 48 hours.").
+
+3. Feature: The Semantic RAG Engine (Engine Beta)
+This feature manages the fuzzy, localized guidelines using a serverless vector database to ensure contextually relevant retrieval.
+
+Component Name: rag_engine.py
+
+Dependencies: lancedb, llama-index (or langchain), Pydantic.
+
+Key Features:
+
+DB Connection: Connects to the local, pre-computed .lancedb directory upon server initialization.
+
+Tool - search_guidelines: Exposes an MCP Tool that accepts a natural language query and an optional dictionary of metadata_filters (e.g., {"hardiness_zone": "6b", "crop_type": "tomato"}).
+
+Pre-filtering: Applies exact-match filters on the LanceDB metadata before running the vector search to prevent cross-contamination of regional advice.
+
+Output: Returns the top-k Markdown chunks along with their mandatory source_file citation so the LLM can properly reference the community guideline.
+
+4. Feature: The Intelligent Router (The Synthesizer)
+Instead of forcing the agent to guess which engine to use, this feature acts as an orchestration tool that queries both and combines the results.
+
+Component Name: router.py
+
+Dependencies: Internal links to rules_engine.py and rag_engine.py.
+
+Key Features:
+
+Tool - comprehensive_ag_consult: The primary tool exposed to external agents. It requires query, crop, and environmental_context.
+
+Parallel Execution: Asynchronously fires the context to Engine Alpha (checking for hard stops) and the query to Engine Beta (fetching best practices).
+
+Payload Formatting: Returns a structured Markdown string to the LLM divided strictly into:
+
+🛑 HARD CONSTRAINTS (Rules)
+
+📖 COMMUNITY GUIDELINES (RAG)
+
+5. Feature: The Open-Source Ingestion Script (The Builder)
+This is not an MCP tool, but a standalone developer script crucial for maintaining the repository.
+
+Component Name: build_index.py
+
+Dependencies: lancedb, sentence-transformers (e.g., all-MiniLM-L6-v2), pyyaml.
+
+Key Features:
+
+Markdown Parsing: Iterates through the /data/guidelines/ directory, reading .md files.
+
+Metadata Extraction: Strips the YAML frontmatter from the top of each Markdown file to extract tags (author, zone, crop, soil_type).
+
+Chunking & Embedding: Splits the document body into semantic chunks, generates local vector embeddings using a lightweight model, and maps the extracted metadata to every chunk.
+
+Upsert: Commits the final structured data to the local .lancedb folder, ready to be pushed to the main branch.

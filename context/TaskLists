@@ -1,0 +1,99 @@
+Sprint 1: Foundation & Environment
+Goal: Scaffold the repository and establish the core MCP server lifecycle.
+
+Task 1.1: Initialize Project Structure
+
+Create the directory tree: /src, /data/rules, /data/guidelines, and /tests.
+
+Generate a requirements.txt including mcp, json-logic-py, lancedb, llama-index, sentence-transformers, and pydantic.
+
+Task 1.2: Build the MCP Transport Layer (server_main.py)
+
+Initialize an mcp.Server instance named AgriCore MCP-Server.
+
+Set up the stdio server transport loop.
+
+Implement basic error handling for graceful shutdowns.
+
+Sprint 2: Engine Alpha (Deterministic)
+Goal: Build the zero-hallucination JSON execution environment.
+
+Task 2.1: Implement the Logic Evaluator (rules_engine.py)
+
+Write a function to recursively load and cache all .json files from /data/rules/ on server startup.
+
+Create the evaluate_hard_constraints function using the json-logic-py library to test incoming environmental variables against the loaded rule schemas.
+
+Task 2.2: Expose the MCP Tool
+
+Define the Pydantic input schema for EvaluateHardConstraintsInput.
+
+Register the tool with the MCP server to accept requests and return the structured Pass/Fail string.
+
+Sprint 3: Engine Beta (Semantic)
+Goal: Set up the local vector database and retrieval logic.
+
+Task 3.1: Configure LanceDB Connection (rag_engine.py)
+
+Initialize a connection to a local .lancedb directory.
+
+Set up the LlamaIndex wrapper to interact with the LanceDB tables.
+
+Task 3.2: Implement Metadata Filtering & Search
+
+Write the semantic search function that takes a natural language query.
+
+Implement exact-match pre-filtering for metadata (e.g., ensuring a search for "tomato" only checks rows where crop_tags contains "tomato").
+
+Task 3.3: Expose the MCP Tool
+
+Define the Pydantic schema for SearchGuidelinesInput.
+
+Register the tool with the MCP server, ensuring the output cleanly lists the retrieved Markdown chunks and their source file citations.
+
+Sprint 4: The Data Ingestion Pipeline
+Goal: Automate the conversion of human-readable Markdown into vector embeddings.
+
+Task 4.1: Parse Markdown & YAML (build_index.py)
+
+Write a standalone Python script to iterate through /data/guidelines/.
+
+Extract the YAML frontmatter for metadata and isolate the Markdown body for chunking.
+
+Task 4.2: Local Embedding & Upsertion
+
+Implement a local embedding model (e.g., all-MiniLM-L6-v2 via HuggingFace).
+
+Chunk the Markdown, generate vectors, and upsert the data (text + vectors + metadata) into the local LanceDB table.
+
+Sprint 5: The Intelligent Router
+Goal: Synthesize the dual-engine architecture into a single, agent-friendly endpoint.
+
+Task 5.1: Build the Synthesis Logic (router.py)
+
+Create the comprehensive_ag_consult function.
+
+Write asynchronous calls to fire data to both Engine Alpha and Engine Beta simultaneously.
+
+Task 5.2: Format the Output Payload
+
+Parse the responses from both engines and construct the final Markdown response string (separated into 🛑 HARD CONSTRAINTS and 📖 COMMUNITY GUIDELINES).
+
+Register this overarching tool with the MCP server.
+
+Sprint 6: Testing & Mock Data
+Goal: Prove the system works before attempting to connect an external LLM.
+
+Task 6.1: Generate Mock Contributor Data
+
+Create 3 sample JSON rule files (e.g., frost limits, nitrogen limits).
+
+Create 3 sample Markdown guideline files with YAML frontmatter (e.g., organic aphid control, companion planting).
+
+Task 6.2: Run the Ingestion Script
+
+Execute build_index.py to ensure LanceDB successfully generates the .lancedb directory from the mock Markdown.
+
+Task 6.3: CLI Testing
+
+Write a quick test_client.py script that manually sends JSON-RPC requests to the running server to verify the tools return the expected payloads.
