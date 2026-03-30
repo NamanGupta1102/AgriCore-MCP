@@ -1,0 +1,18 @@
+[project]
+name = "agricore-mcp"
+version = "0.1.0"
+description = "An open-source MCP server providing community-driven agricultural knowledge to LLMs."
+requires-python = ">=3.11"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+# Suppress noisy third-party warnings during the test run
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]

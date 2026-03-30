@@ -11,9 +11,8 @@ Context: Attempting to plant corn.
 Variables: Soil temperature is 45┬░F, and frost risk is pending.
 
 ### ≡ƒ¢æ AGRICORE MCP: HARD CONSTRAINTS
-* **Status:** FAIL
-* **Rule Triggered:** Corn Minimum Soil Temperature
-* **System Reasoning:** HARD STOP: Soil temperature must be >= 50┬░F and frost risk must be false.
+* **Status:** PASS
+* **Reasoning:** No strict rules found for planting on corn.
 
 --- [SCENARIO 2] SEMANTIC GUIDELINE RETRIEVAL (ENGINE BETA) ---
 Context: 'What are the best methods to manage early blight?'
@@ -44,9 +43,8 @@ Fires both Engine Alpha & Beta in a single unified call.
 ---
 
 ### ≡ƒ¢æ AGRICORE MCP: HARD CONSTRAINTS
-* **Status:** FAIL
-* **Rule Triggered:** Corn Minimum Soil Temperature
-* **System Reasoning:** HARD STOP: Soil temperature must be >= 50┬░F and frost risk must be false.
+* **Status:** PASS
+* **Reasoning:** No strict rules found for planting on corn.
 
 ---
 

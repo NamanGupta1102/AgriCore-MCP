@@ -1,0 +1,15 @@
+{
+  "rule_id": "rule_wheat_winter_frost_001",
+  "name": "Winter Wheat Hard Frost Limit",
+  "target_crop": "wheat_winter",
+  "category": "planting",
+  "description": "Prevents planting winter wheat when a hard frost event (< 28°F) is forecast within 7 days, which can kill newly germinated seedlings before they establish.",
+  "logic_evaluator": {
+    "and": [
+      {">=": [{"var": "air_temp_f"}, 28]},
+      {"==": [{"var": "frost_risk_7_day"}, false]}
+    ]
+  },
+  "response_pass": "Conditions met: Air temperature is above the hard frost threshold and no frost risk is forecast. Winter wheat planting is permitted.",
+  "response_fail": "HARD STOP: A hard frost event is forecast within 7 days or current air temperature is below 28°F. Winter wheat seedlings cannot survive establishment under these conditions."
+}

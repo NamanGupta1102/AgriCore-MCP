@@ -1,0 +1,87 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.11.14, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\gupta\OneDrive\Desktop\Coding_Projects\AgriCore-MCP\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\gupta\OneDrive\Desktop\Coding_Projects\AgriCore-MCP
+configfile: pyproject.toml
+plugins: anyio-4.13.0
+collecting ... collected 4 items
+
+tests/test_alpha.py::test_hard_constraint_fail_on_cold_soil FAILED       [ 25%]
+tests/test_alpha.py::test_hard_constraint_fail_on_frost_risk FAILED      [ 50%]
+tests/test_alpha.py::test_hard_constraint_pass_on_good_conditions FAILED [ 75%]
+tests/test_alpha.py::test_no_rule_match_returns_pass PASSED              [100%]
+
+================================== FAILURES ===================================
+___________________ test_hard_constraint_fail_on_cold_soil ____________________
+
+rules_engine = <rules_engine.RulesEngine object at 0x0000027D06EECC90>
+
+    def test_hard_constraint_fail_on_cold_soil(rules_engine):
+        """
+        Engine Alpha must return FAIL when soil temperature is below the 50░F threshold.
+        Also verifies the 'HARD STOP' reasoning string is present in the output.
+        """
+        env = {"soil_temp_f": 45, "frost_risk_7_day": False}
+        result = rules_engine.evaluate(
+            action_category="planting",
+            target_crop="corn",
+            env_context=env
+        )
+>       assert "FAIL" in result, f"Expected FAIL status, got:\n{result}"
+E       AssertionError: Expected FAIL status, got:
+E         ### \U0001f6d1 AGRICORE MCP: HARD CONSTRAINTS
+E         * **Status:** PASS
+E         * **Reasoning:** No strict rules found for planting on corn.
+E       assert 'FAIL' in '### \U0001f6d1 AGRICORE MCP: HARD CONSTRAINTS\\n* **Status:** PASS\\n* **Reasoning:** No strict rules found for planting on corn.'
+
+tests\test_alpha.py:20: AssertionError
+___________________ test_hard_constraint_fail_on_frost_risk ___________________
+
+rules_engine = <rules_engine.RulesEngine object at 0x0000027D06EECC90>
+
+    def test_hard_constraint_fail_on_frost_risk(rules_engine):
+        """
+        Engine Alpha must return FAIL when frost risk is present, even if soil temp is adequate.
+        """
+        env = {"soil_temp_f": 55, "frost_risk_7_day": True}
+        result = rules_engine.evaluate(
+            action_category="planting",
+            target_crop="corn",
+            env_context=env
+        )
+>       assert "FAIL" in result, f"Expected FAIL status due to frost risk, got:\n{result}"
+E       AssertionError: Expected FAIL status due to frost risk, got:
+E         ### \U0001f6d1 AGRICORE MCP: HARD CONSTRAINTS
+E         * **Status:** PASS
+E         * **Reasoning:** No strict rules found for planting on corn.
+E       assert 'FAIL' in '### \U0001f6d1 AGRICORE MCP: HARD CONSTRAINTS\\n* **Status:** PASS\\n* **Reasoning:** No strict rules found for planting on corn.'
+
+tests\test_alpha.py:34: AssertionError
+________________ test_hard_constraint_pass_on_good_conditions _________________
+
+rules_engine = <rules_engine.RulesEngine object at 0x0000027D06EECC90>
+
+    def test_hard_constraint_pass_on_good_conditions(rules_engine):
+        """
+        Engine Alpha must return PASS when soil temp >= 50░F and frost risk is false.
+        """
+        env = {"soil_temp_f": 55, "frost_risk_7_day": False}
+        result = rules_engine.evaluate(
+            action_category="planting",
+            target_crop="corn",
+            env_context=env
+        )
+        assert "PASS" in result, f"Expected PASS status, got:\n{result}"
+>       assert "Conditions met" in result, f"Expected pass reasoning string, got:\n{result}"
+E       AssertionError: Expected pass reasoning string, got:
+E         ### \U0001f6d1 AGRICORE MCP: HARD CONSTRAINTS
+E         * **Status:** PASS
+E         * **Reasoning:** No strict rules found for planting on corn.
+E       assert 'Conditions met' in '### \U0001f6d1 AGRICORE MCP: HARD CONSTRAINTS\\n* **Status:** PASS\\n* **Reasoning:** No strict rules found for planting on corn.'
+
+tests\test_alpha.py:48: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_alpha.py::test_hard_constraint_fail_on_cold_soil - Assertio...
+FAILED tests/test_alpha.py::test_hard_constraint_fail_on_frost_risk - Asserti...
+FAILED tests/test_alpha.py::test_hard_constraint_pass_on_good_conditions - As...
+========================= 3 failed, 1 passed in 0.17s =========================

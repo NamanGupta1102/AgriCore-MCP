@@ -1,10 +1,27 @@
-mcp
+# ─── MCP Transport ─────────────────────────────────────────────────────────
+mcp==1.14.0
+
+# ─── Engine Alpha: Deterministic Rules ─────────────────────────────────────
 json-logic-qubit
-lancedb
-llama-index
-llama-index-vector-stores-lancedb
-llama-index-embeddings-huggingface
-sentence-transformers
+
+# ─── Engine Beta: Semantic RAG ─────────────────────────────────────────────
+lancedb==0.30.0
+llama-index==0.14.19
+llama-index-core==0.14.19
+llama-index-vector-stores-lancedb==0.5.0
+llama-index-embeddings-huggingface==0.7.0
+
+# ─── Pinned for compatibility: transformers 5.x / sentence-transformers 5.x
+# ─── break internal model-loading APIs used by llama-index-embeddings-huggingface
+sentence-transformers==3.0.1
+transformers==4.40.2
+tokenizers>=0.19,<0.20
+
+# ─── Supporting libraries ───────────────────────────────────────────────────
+tiktoken
 pydantic
 pandas
 PyYAML
+
+# ─── Dev / Testing ──────────────────────────────────────────────────────────
+pytest

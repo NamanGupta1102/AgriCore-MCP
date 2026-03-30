@@ -1,31 +1,63 @@
-import os
-import sys
+"""
+test_alpha.py — Unit tests for Engine Alpha (Deterministic Rules Engine).
 
-# Ensure src/ is in the module path
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "src"))
-from rules_engine import RulesEngine
+Uses the `rules_engine` session fixture from conftest.py.
+Run with: pytest tests/test_alpha.py -v
+"""
 
-def test_engine_alpha():
-    # Load Engine alpha focusing on the repo's data directory
-    engine = RulesEngine(rules_dir=os.path.join(os.path.dirname(__file__), "..", "data", "rules"))
 
-    # 1. Test a Failing condition (soil temp too low)
-    env_fail = {"soil_temp_f": 45, "frost_risk_7_day": False}
-    result_fail = engine.evaluate(action_category="planting", target_crop="corn", env_context=env_fail)
-    print("--- FAIL EVALUATION ---")
-    print(result_fail)
-    assert "FAIL" in result_fail
-    assert "HARD STOP" in result_fail
-    
-    # 2. Test a Passing condition (soil temp good, no frost)
-    env_pass = {"soil_temp_f": 55, "frost_risk_7_day": False}
-    result_pass = engine.evaluate(action_category="planting", target_crop="corn", env_context=env_pass)
-    print("--- PASS EVALUATION ---")
-    print(result_pass)
-    assert "PASS" in result_pass
-    assert "Conditions met" in result_pass
+def test_hard_constraint_fail_on_cold_soil(rules_engine):
+    """
+    Engine Alpha must return FAIL when soil temperature is below the 50°F threshold.
+    Also verifies the 'HARD STOP' reasoning string is present in the output.
+    """
+    env = {"soil_temp_f": 45, "frost_risk_7_day": False}
+    result = rules_engine.evaluate(
+        action_category="planting",
+        target_crop="corn",
+        env_context=env
+    )
+    assert "FAIL" in result, f"Expected FAIL status, got:\n{result}"
+    assert "HARD STOP" in result, f"Expected HARD STOP reasoning, got:\n{result}"
 
-    print("\n✅ All Engine Alpha unit checks passed successfully!")
 
-if __name__ == "__main__":
-    test_engine_alpha()
+def test_hard_constraint_fail_on_frost_risk(rules_engine):
+    """
+    Engine Alpha must return FAIL when frost risk is present, even if soil temp is adequate.
+    """
+    env = {"soil_temp_f": 55, "frost_risk_7_day": True}
+    result = rules_engine.evaluate(
+        action_category="planting",
+        target_crop="corn",
+        env_context=env
+    )
+    assert "FAIL" in result, f"Expected FAIL status due to frost risk, got:\n{result}"
+
+
+def test_hard_constraint_pass_on_good_conditions(rules_engine):
+    """
+    Engine Alpha must return PASS when soil temp >= 50°F and frost risk is false.
+    """
+    env = {"soil_temp_f": 55, "frost_risk_7_day": False}
+    result = rules_engine.evaluate(
+        action_category="planting",
+        target_crop="corn",
+        env_context=env
+    )
+    assert "PASS" in result, f"Expected PASS status, got:\n{result}"
+    assert "Conditions met" in result, f"Expected pass reasoning string, got:\n{result}"
+
+
+def test_no_rule_match_returns_pass(rules_engine):
+    """
+    When no rules exist for the given action+crop combination,
+    the engine must return a PASS with a 'No strict rules found' message.
+    """
+    env = {"soil_temp_f": 70}
+    result = rules_engine.evaluate(
+        action_category="harvesting",
+        target_crop="mystery_crop",
+        env_context=env
+    )
+    assert "PASS" in result, f"Expected default PASS for unknown rule, got:\n{result}"
+    assert "No strict rules" in result, f"Expected 'No strict rules' message, got:\n{result}"

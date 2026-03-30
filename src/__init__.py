@@ -1,0 +1,1 @@
+# AgriCore MCP — src package

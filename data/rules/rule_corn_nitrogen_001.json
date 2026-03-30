@@ -1,0 +1,15 @@
+{
+  "rule_id": "rule_corn_nitrogen_application_001",
+  "name": "Corn Nitrogen Application Rain Block",
+  "target_crop": "corn",
+  "category": "fertilizing",
+  "description": "Prevents application of nitrogen fertilizers on corn when heavy rain is forecast within 48 hours. Runoff from N-application during rain events causes waterway contamination and total nutrient loss.",
+  "logic_evaluator": {
+    "and": [
+      {"==": [{"var": "heavy_rain_48hr"}, false]},
+      {">=": [{"var": "soil_temp_f"}, 50]}
+    ]
+  },
+  "response_pass": "Conditions met: No heavy rain is forecast and soil temperature is adequate for nitrogen uptake. Nitrogen application is permitted.",
+  "response_fail": "HARD STOP: Do not apply nitrogen fertilizers when heavy rain is forecast within 48 hours. This causes direct nutrient runoff into waterways and complete fertilizer loss."
+}
