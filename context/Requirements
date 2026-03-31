@@ -32,7 +32,7 @@ FR-4: Data Ingestion & Transformation
 
 The system MUST provide an ingestion script that converts community-submitted .md files (with YAML frontmatter) into LanceDB vector embeddings.
 
-The system MUST execute this ingestion using a localized, open-source embedding model (e.g., all-MiniLM-L6-v2) to eliminate API costs for contributors.
+The system MUST execute this ingestion using a localized, open-source embedding model (e.g., BAAI/bge-small-en-v1.5) to eliminate API costs for contributors.
 
 FR-5: Unified Agent Routing
 

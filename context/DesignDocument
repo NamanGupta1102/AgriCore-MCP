@@ -59,6 +59,7 @@ class SearchGuidelinesInput(BaseModel):
 Python
 class ComprehensiveConsultInput(BaseModel):
     query: str = Field(description="The overarching question from the user.")
+    action_category: str = Field(description="The category of action (e.g., 'planting', 'fertilizing', 'harvesting').")
     target_crop: str = Field(description="The crop in question.")
     env_context: dict = Field(description="Dictionary of known environmental variables for rule evaluation.")
     location_zone: str = Field(description="The USDA hardiness zone of the farm for guideline filtering.")

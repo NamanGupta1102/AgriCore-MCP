@@ -6,7 +6,7 @@ try:
     from llama_index.core import VectorStoreIndex, Document, Settings
     from llama_index.vector_stores.lancedb import LanceDBVectorStore
     from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-    from llama_index.core.vector_stores import ExactMatchFilter, MetadataFilters
+    from llama_index.core.vector_stores import ExactMatchFilter, MetadataFilters, MetadataFilter, FilterOperator
     LANCEDB_AVAILABLE = True
 except ImportError:
     LANCEDB_AVAILABLE = False
@@ -83,8 +83,7 @@ class RagEngine:
         if metadata_filters:
             for key, value in metadata_filters.items():
                 if isinstance(value, list) and value:
-                    # simplistic list matching: match first item for dummy search
-                    filters.append(ExactMatchFilter(key=key, value=value[0]))
+                    filters.append(MetadataFilter(key=key, value=value, operator=FilterOperator.IN))
                 elif isinstance(value, str):
                     filters.append(ExactMatchFilter(key=key, value=value))
                     
