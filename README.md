@@ -46,7 +46,7 @@ AgriCore MCP enforces a **Hybrid Intelligence Model** — separating hard biolog
 ### 2. Clone & Set Up Environment
 
 ```bash
-git clone https://github.com/your-org/AgriCore-MCP.git
+git clone https://github.com/NamanGupta1102/AgriCore-MCP
 cd AgriCore-MCP
 
 python -m venv .venv
