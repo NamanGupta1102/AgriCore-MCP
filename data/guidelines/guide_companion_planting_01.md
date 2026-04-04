@@ -2,8 +2,8 @@
 id: "guide_companion_planting_01"
 title: "Companion Planting Tomatoes"
 author: "bot_01"
-crop_tags: ["tomato"]
-hardiness_zones: ["all"]
+plant_tags: ["monstera"]
+light_levels: ["all"]
 category: "companion_planting"
 ---
 # Companion Planting

@@ -1,5 +1,7 @@
 # ─── MCP Transport ─────────────────────────────────────────────────────────
 mcp==1.14.0
+starlette
+uvicorn
 
 # ─── Engine Alpha: Deterministic Rules ─────────────────────────────────────
 json-logic-qubit

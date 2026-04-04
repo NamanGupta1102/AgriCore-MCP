@@ -2,8 +2,8 @@
 id: "guide_corn_soil_ph"
 title: "Corn Soil Requirements"
 author: "bot_01"
-crop_tags: ["corn"]
-hardiness_zones: ["5a"]
+plant_tags: ["monstera"]
+light_levels: ["direct"]
 category: "soil_health"
 ---
 # Corn Soil Health

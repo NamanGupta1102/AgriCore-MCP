@@ -2,8 +2,8 @@
 id: "guide_tomato_blight_ne_01"
 title: "Managing Early Blight in Humid Climates"
 author: "bot_01"
-crop_tags: ["tomato"]
-hardiness_zones: ["6b"]
+plant_tags: ["monstera"]
+light_levels: ["low"]
 category: "disease_management"
 ---
 # Managing Early Blight

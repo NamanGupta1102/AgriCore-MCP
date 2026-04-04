@@ -29,35 +29,35 @@ def main():
 
     # Demo 1: Engine Alpha
     print("--- [SCENARIO 1] HARD CONSTRAINTS VERIFICATION (ENGINE ALPHA) ---")
-    print("Context: Attempting to plant corn.")
-    print("Variables: Soil temperature is 45°F, and frost risk is pending.")
+    print("Context: Attempting to plant monstera.")
+    print("Variables: Room temperature is 45°F, and frost risk is pending.")
     res = alpha_engine.evaluate(
         action_category="planting", 
-        target_crop="corn", 
-        env_context={"soil_temp_f": 45, "frost_risk_7_day": True}
+        target_crop="monstera", 
+        env_context={"room_temp_f": 45, "frost_risk_7_day": True}
     )
     print("\n" + res + "\n")
 
     # Demo 2: Engine Beta
     print("--- [SCENARIO 2] SEMANTIC GUIDELINE RETRIEVAL (ENGINE BETA) ---")
     print("Context: 'What are the best methods to manage early blight?'")
-    print("Filters: Ensuring responses are constrained specifically to [tomato] crops.")
+    print("Filters: Ensuring responses are constrained specifically to [monstera] plants.")
     res = beta_engine.search(
-        query="What are the best methods to manage early blight?",
-        metadata_filters={"crop_tags": ["tomato"]}
+        query="What are the best methods to manage root rot?",
+        metadata_filters={"plant_tags": ["monstera"]}
     )
     print("\n" + res + "\n")
 
     # Demo 3: Intelligent Router (Sprint 5)
     print("--- [SCENARIO 3] COMPREHENSIVE CONSULTATION (INTELLIGENT ROUTER) ---")
-    print("Context: Complete consultation for corn planting in borderline conditions.")
+    print("Context: Complete consultation for monstera planting in borderline conditions.")
     print("Fires both Engine Alpha & Beta in a single unified call.")
     res = asyncio.run(router.comprehensive_ag_consult(
         action_category="planting",
-        target_crop="corn",
-        env_context={"soil_temp_f": 45, "frost_risk_7_day": True},
-        query="Best practices for planting corn in cold soil conditions?",
-        metadata_filters={"crop_tags": ["corn"]}
+        target_plant="monstera",
+        env_context={"room_temp_f": 45, "frost_risk_7_day": True},
+        query="Best practices for planting monstera in cold room conditions?",
+        metadata_filters={"plant_tags": ["monstera"]}
     ))
     print("\n" + res + "\n")
     
