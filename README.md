@@ -90,11 +90,10 @@ Set **`PORT`** (default `8000`) and optional **`BIND_HOST`** (default `0.0.0.0`)
 
 ### Railway
 
-1. Connect the repo and use the included **`railway.json`** (config-as-code overrides dashboard settings):
-   - **Build:** `pip install -r requirements.txt && python src/build_index.py` (generates **`data/.lancedb`** in the image).
-   - **Start:** `python main.py` — healthcheck **`/health`**.
-2. Alternatively, commit a prebuilt **`data/.lancedb`** and set **`build.buildCommand`** to `null` in `railway.json` if you want Nixpacks defaults only.
-3. Use a plan with enough **RAM** for sentence-transformers + LanceDB (build and runtime; free tiers may OOM or be slow).
+1. Use the included **`Dockerfile`** + **`railway.json`** (`builder: DOCKERFILE`). The image runs **`python src/build_index.py`** *after* the final `COPY`, so **`data/.lancedb`** is not wiped (Nixpacks alone ran a second `COPY . /app` after the index build and removed `.lancedb` because it is not in Git).
+2. **Start:** `python main.py` — healthcheck **`/health`**.
+3. Ensure **`data/rules`** and **`data/guidelines`** are tracked in Git (your `.gitignore` may ignore `/data`; force-add or narrow ignores if deploys miss rules/guidelines).
+4. Use a plan with enough **RAM** for sentence-transformers + LanceDB (build and runtime; free tiers may OOM or be slow).
 
 ---
 
