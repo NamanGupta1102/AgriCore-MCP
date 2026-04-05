@@ -12,6 +12,9 @@ except ImportError:
     LANCEDB_AVAILABLE = False
     logging.warning("LlamaIndex or LanceDB not available. RagEngine will run in stub mode.")
 
+# Cosine similarity scores from the retriever; drop weak matches to reduce irrelevant chunks.
+MIN_RETRIEVAL_SCORE = 0.18
+
 class RagEngine:
     """
     Engine Beta (Semantic RAG)
@@ -92,9 +95,15 @@ class RagEngine:
         try:
             retriever = self.index.as_retriever(similarity_top_k=top_k, filters=mq_filters)
             nodes = retriever.retrieve(query)
+
+            nodes = self._nodes_meeting_score_floor(nodes, top_k)
             
             if not nodes:
-                return f"### 📖 AGRICORE MCP: COMMUNITY GUIDELINES\nNo relevant guidelines found for query: '{query}'."
+                return (
+                    "### 📖 AGRICORE MCP: COMMUNITY GUIDELINES\n\n"
+                    f"No guidelines met the similarity threshold for query: '{query}'. "
+                    "Try rephrasing, removing strict filters, or broadening the topic."
+                )
 
             result_str = "### 📖 AGRICORE MCP: COMMUNITY GUIDELINES\n\n"
             
@@ -112,3 +121,16 @@ class RagEngine:
         except Exception as e:
             logging.error(f"Semantic search failed: {e}")
             return f"### 📖 AGRICORE MCP: COMMUNITY GUIDELINES\nFailed to traverse the vector bank: {str(e)}"
+
+    def _nodes_meeting_score_floor(self, nodes: List[Any], top_k: int) -> List[Any]:
+        """Keep nodes whose retriever score clears MIN_RETRIEVAL_SCORE (higher = more similar)."""
+        if not nodes:
+            return []
+        kept: List[Any] = []
+        for n in nodes:
+            score = getattr(n, "score", None)
+            if score is None:
+                kept.append(n)
+            elif score >= MIN_RETRIEVAL_SCORE:
+                kept.append(n)
+        return kept[:top_k]

@@ -14,7 +14,7 @@ def test_hard_constraint_fail_on_cold_soil(rules_engine):
     env = {"soil_temp_f": 45, "frost_risk_7_day": False}
     result = rules_engine.evaluate(
         action_category="planting",
-        target_crop="corn",
+        target_plant="corn",
         env_context=env
     )
     assert "FAIL" in result, f"Expected FAIL status, got:\n{result}"
@@ -28,7 +28,7 @@ def test_hard_constraint_fail_on_frost_risk(rules_engine):
     env = {"soil_temp_f": 55, "frost_risk_7_day": True}
     result = rules_engine.evaluate(
         action_category="planting",
-        target_crop="corn",
+        target_plant="corn",
         env_context=env
     )
     assert "FAIL" in result, f"Expected FAIL status due to frost risk, got:\n{result}"
@@ -41,7 +41,7 @@ def test_hard_constraint_pass_on_good_conditions(rules_engine):
     env = {"soil_temp_f": 55, "frost_risk_7_day": False}
     result = rules_engine.evaluate(
         action_category="planting",
-        target_crop="corn",
+        target_plant="corn",
         env_context=env
     )
     assert "PASS" in result, f"Expected PASS status, got:\n{result}"
@@ -56,7 +56,7 @@ def test_no_rule_match_returns_pass(rules_engine):
     env = {"soil_temp_f": 70}
     result = rules_engine.evaluate(
         action_category="harvesting",
-        target_crop="mystery_crop",
+        target_plant="mystery_crop",
         env_context=env
     )
     assert "PASS" in result, f"Expected default PASS for unknown rule, got:\n{result}"

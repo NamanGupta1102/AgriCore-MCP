@@ -31,11 +31,14 @@ class IntelligentRouter:
         """
         logging.info(f"[Router] Comprehensive consult: action='{action_category}', plant='{target_plant}'")
 
+        # Bias RAG toward the same entity Alpha evaluates (rules corpus may not tag by plant).
+        rag_query = f"{query.strip()}\n\nPlant: {target_plant.strip()}"
+
         # Fire both engines concurrently — neither blocks the other.
         # asyncio.to_thread() offloads the synchronous engine calls to a thread pool.
         rules_output, rag_output = await asyncio.gather(
             asyncio.to_thread(self.rules_engine.evaluate, action_category, target_plant, env_context),
-            asyncio.to_thread(self.rag_engine.search, query, metadata_filters),
+            asyncio.to_thread(self.rag_engine.search, rag_query, metadata_filters),
         )
 
         # Synthesize the final payload

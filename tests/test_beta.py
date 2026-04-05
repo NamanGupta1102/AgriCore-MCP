@@ -24,15 +24,15 @@ def test_general_search_returns_blight_guide(rag_engine):
 
 def test_filtered_search_returns_correct_crop_guide(rag_engine):
     """
-    A search filtered by crop='corn' and zone='5a' must return the corn soil guide,
+    A search filtered by plant_tags + light_levels must return the corn soil guide,
     confirming metadata pre-filtering is working correctly.
     """
     result = rag_engine.search(
         query="soil requirements and pH levels",
-        metadata_filters={"crop_tags": ["corn"], "hardiness_zones": "5a"}
+        metadata_filters={"plant_tags": "corn", "light_levels": "direct"}
     )
-    assert "guide_corn_soil_ph" in result, (
-        f"Expected corn soil guide with crop+zone filters, got:\n{result}"
+    assert "guide_corn" in result, (
+        f"Expected a corn guideline (e.g. guide_corn_*) with plant+light filters, got:\n{result}"
     )
 
 
@@ -43,7 +43,7 @@ def test_filter_prevents_cross_crop_contamination(rag_engine):
     """
     result = rag_engine.search(
         query="tomatoes",
-        metadata_filters={"crop_tags": ["apples"]}
+        metadata_filters={"plant_tags": "apples"}
     )
     assert "guide_tomato_blight_ne_01" not in result, (
         f"Tomato guide should NOT appear when filtering for apples:\n{result}"

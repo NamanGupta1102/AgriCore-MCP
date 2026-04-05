@@ -34,6 +34,13 @@ class RulesEngine:
         
         logging.info(f"Loaded {len(self.rules)} rules into Engine Alpha.")
 
+    @staticmethod
+    def _rule_matches_target(rule: Dict[str, Any], target: str) -> bool:
+        """Match either target_plant or target_crop so crop JSON rules stay compatible."""
+        plant = rule.get("target_plant")
+        crop = rule.get("target_crop")
+        return plant == target or crop == target
+
     def evaluate(self, action_category: str, target_plant: str, env_context: Dict[str, Any]) -> str:
         """
         Evaluate environmental conditions against loaded rules.
@@ -41,7 +48,7 @@ class RulesEngine:
         """
         relevant_rules = [
             r for r in self.rules
-            if r.get("category") == action_category and r.get("target_plant") == target_plant
+            if r.get("category") == action_category and self._rule_matches_target(r, target_plant)
         ]
 
         if not relevant_rules:
