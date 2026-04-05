@@ -59,15 +59,15 @@ class RagEngine:
         docs = [
             Document(
                 text="Early blight (Alternaria solani) thrives in high humidity. Use copper fungicides every 7 days when humidity exceeds 80%. Ensure good airflow and remove lower leaves.",
-                metadata={"id": "guide_tomato_blight_ne_01", "crop_tags": "tomato", "hardiness_zones": "6b", "category": "disease_management", "is_dummy": True}
+                metadata={"id": "guide_tomato_blight_ne_01", "plant_tags": "tomato", "light_levels": "bright_indirect", "category": "disease_management", "is_dummy": True}
             ),
             Document(
                 text="Companion planting: Plant basil near tomatoes to deter hornworms and whiteflies. This improves organic pest management and can subtly improve tomato flavor.",
-                metadata={"id": "guide_companion_planting_01", "crop_tags": "tomato", "hardiness_zones": "all", "category": "companion_planting", "is_dummy": True}
+                metadata={"id": "guide_companion_planting_01", "plant_tags": "tomato", "light_levels": "all", "category": "companion_planting", "is_dummy": True}
             ),
             Document(
                 text="Corn requires rich soil with high nitrogen. Test soil prior to planting to ensure pH is between 5.8 and 7.0 for optimal germination and health.",
-                metadata={"id": "guide_corn_soil_ph", "crop_tags": "corn", "hardiness_zones": "5a", "category": "soil_health", "is_dummy": True}
+                metadata={"id": "guide_corn_soil_ph", "plant_tags": "corn", "light_levels": "direct", "category": "soil_health", "is_dummy": True}
             )
         ]
         from llama_index.core import StorageContext
@@ -104,9 +104,9 @@ class RagEngine:
             for i, node in enumerate(nodes):
                 meta = node.metadata
                 source_id = meta.get("id", "Unknown")
-                zone = meta.get("hardiness_zones", "Unknown")
+                light_level = meta.get("light_levels", "Unknown")
                 text = node.get_content().strip()
-                result_str += f"**Source {i+1} Retrieved:** (File: `{source_id}.md`) - Zone: `{zone}`\n> {text}\n\n"
+                result_str += f"**Source {i+1} Retrieved:** (File: `{source_id}.md`) - Light: `{light_level}`\n> {text}\n\n"
                 
             return result_str
         except Exception as e:

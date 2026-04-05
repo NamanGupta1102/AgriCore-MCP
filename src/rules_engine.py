@@ -34,18 +34,18 @@ class RulesEngine:
         
         logging.info(f"Loaded {len(self.rules)} rules into Engine Alpha.")
 
-    def evaluate(self, action_category: str, target_crop: str, env_context: Dict[str, Any]) -> str:
+    def evaluate(self, action_category: str, target_plant: str, env_context: Dict[str, Any]) -> str:
         """
         Evaluate environmental conditions against loaded rules.
         Returns a formatted markdown string representing PASS/FAIL constraints.
         """
         relevant_rules = [
             r for r in self.rules
-            if r.get("category") == action_category and r.get("target_crop") == target_crop
+            if r.get("category") == action_category and r.get("target_plant") == target_plant
         ]
 
         if not relevant_rules:
-            return f"### 🛑 AGRICORE MCP: HARD CONSTRAINTS\n* **Status:** PASS\n* **Reasoning:** No strict rules found for {action_category} on {target_crop}."
+            return f"### 🛑 AGRICORE MCP: HARD CONSTRAINTS\n* **Status:** PASS\n* **Reasoning:** No strict rules found for {action_category} on {target_plant}."
 
         failed_rules = []
         passed_rules = []
