@@ -90,9 +90,11 @@ Set **`PORT`** (default `8000`) and optional **`BIND_HOST`** (default `0.0.0.0`)
 
 ### Railway
 
-1. Connect the repo and use the included **`railway.json`** (start: `python main.py`, healthcheck: `/health`).
-2. Run **`python src/build_index.py`** in a build step or commit **`data/.lancedb`** so Engine Beta has vectors in production.
-3. Use a plan with enough **RAM** for sentence-transformers + LanceDB (free tiers may OOM or cold-start slowly).
+1. Connect the repo and use the included **`railway.json`** (config-as-code overrides dashboard settings):
+   - **Build:** `pip install -r requirements.txt && python src/build_index.py` (generates **`data/.lancedb`** in the image).
+   - **Start:** `python main.py` — healthcheck **`/health`**.
+2. Alternatively, commit a prebuilt **`data/.lancedb`** and set **`build.buildCommand`** to `null` in `railway.json` if you want Nixpacks defaults only.
+3. Use a plan with enough **RAM** for sentence-transformers + LanceDB (build and runtime; free tiers may OOM or be slow).
 
 ---
 
