@@ -16,6 +16,6 @@ echo.
 echo =======================================
 echo Starting AgriCore MCP Server...
 echo =======================================
-uv run python src\server_main.py
+uv run python main.py
 
 pause

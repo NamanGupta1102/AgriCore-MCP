@@ -11,7 +11,7 @@ AgriCore MCP enforces a **Hybrid Intelligence Model** — separating hard biolog
 ```
                     ┌─────────────────────────────┐
   Agent / LLM ────▶ │   AgriCore MCP Server        │
-                    │   (stdio transport)           │
+                    │   (SSE / HTTP transport)      │
                     └───────────┬─────────────────-┘
                                 │
               ┌─────────────────┴──────────────────┐
@@ -74,11 +74,25 @@ python test_client.py
 
 ### 5. Start the MCP Server
 
+**Local (SSE over HTTP, default `http://127.0.0.1:8000`):**
+
 ```bash
+# Recommended: root entry (Railway-compatible)
+python main.py
+
+# Or run the module under src/ directly
 python src/server_main.py
 # Or on Windows:
 start_server.bat
 ```
+
+Set **`PORT`** (default `8000`) and optional **`BIND_HOST`** (default `0.0.0.0`) for cloud. Health: **`GET /health`**. MCP SSE: **`GET /sse`**, messages: **`POST /messages/`**. Discovery hint: **`GET /.well-known/mcp`**.
+
+### Railway
+
+1. Connect the repo and use the included **`railway.json`** (start: `python main.py`, healthcheck: `/health`).
+2. Run **`python src/build_index.py`** in a build step or commit **`data/.lancedb`** so Engine Beta has vectors in production.
+3. Use a plan with enough **RAM** for sentence-transformers + LanceDB (free tiers may OOM or cold-start slowly).
 
 ---
 
@@ -96,6 +110,8 @@ Tests are in `tests/`. Engine Beta tests require the embedding model download on
 
 ```
 AgriCore-MCP/
+├── main.py                # Production/Railway entry — runs FastMCP SSE on PORT
+├── railway.json           # Railway deploy: startCommand + /health check
 ├── src/
 │   ├── server_main.py     # MCP server entry point — registers all tools
 │   ├── rules_engine.py    # Engine Alpha: JSON-Logic rule evaluator

@@ -1,7 +1,7 @@
-# ─── MCP Transport ─────────────────────────────────────────────────────────
+# ─── MCP Transport (FastMCP lives in `mcp.server.fastmcp`; official SDK package is `mcp`, not PyPI `fastmcp`)
 mcp==1.14.0
 starlette
-uvicorn
+uvicorn[standard]
 
 # ─── Engine Alpha: Deterministic Rules ─────────────────────────────────────
 json-logic-qubit
