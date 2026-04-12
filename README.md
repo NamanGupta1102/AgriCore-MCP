@@ -34,6 +34,16 @@ AgriCore MCP enforces a **Hybrid Intelligence Model** — separating hard biolog
 | `search_guidelines` | Semantic vector search over community Markdown guidelines (Engine Beta) |
 | `comprehensive_ag_consult` | **⭐ Recommended.** Fires both engines concurrently and returns a unified strategy document |
 
+### MCP Resources (LLM reference)
+
+Static reference material is exposed as resources so agents can **ListResources** / **ReadResource** without bloating tool definitions:
+
+| URI | Content |
+|-----|---------|
+| `agricore://reference/index` | Index of reference URIs |
+| `agricore://reference/engine-alpha-env-context` | Per-rule `env_context` / JSON Logic variable names (from loaded `data/rules`) |
+| `agricore://reference/rag-metadata-and-light-levels` | RAG filter keys and `light_level` vocabulary |
+
 ---
 
 ## Quick Start
@@ -42,34 +52,41 @@ AgriCore MCP enforces a **Hybrid Intelligence Model** — separating hard biolog
 
 - Python 3.11+
 - Git
+- **[uv](https://docs.astral.sh/uv/)** (recommended for environments and `uv run`)
 
 ### 2. Clone & Set Up Environment
+
+**Recommended (uv):**
 
 ```bash
 git clone https://github.com/NamanGupta1102/AgriCore-MCP
 cd AgriCore-MCP
 
-python -m venv .venv
+uv venv
 # Windows:
 .venv\Scripts\activate
 # macOS/Linux:
 source .venv/bin/activate
 
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
+
+**Classic venv + pip:** create `.venv`, activate it, then `pip install -r requirements.txt` as before.
+
+Use **`uv run`** to execute commands inside the project environment without activating the venv (e.g. `uv run pytest`, `uv run python main.py`).
 
 ### 3. Build the Vector Index
 
 This only needs to be run once after cloning, or after adding new guidelines:
 
 ```bash
-python src/build_index.py
+uv run python src/build_index.py
 ```
 
 ### 4. Run the Demo
 
 ```bash
-python test_client.py
+uv run python test_client.py
 ```
 
 ### 5. Start the MCP Server
@@ -100,7 +117,7 @@ Set **`PORT`** (default `8000`) and optional **`BIND_HOST`** (default `0.0.0.0`)
 ## Running Tests
 
 ```bash
-pytest -v
+uv run pytest -v
 ```
 
 Tests are in `tests/`. Engine Beta tests require the embedding model download on first run.
@@ -114,7 +131,8 @@ AgriCore-MCP/
 ├── main.py                # Production/Railway entry — runs FastMCP SSE on PORT
 ├── railway.json           # Railway deploy: startCommand + /health check
 ├── src/
-│   ├── server_main.py     # MCP server entry point — registers all tools
+│   ├── server_main.py     # MCP server entry — tools + reference resources
+│   ├── reference_catalog.py # Markdown for MCP resources (env keys, RAG metadata)
 │   ├── rules_engine.py    # Engine Alpha: JSON-Logic rule evaluator
 │   ├── rag_engine.py      # Engine Beta: LanceDB + LlamaIndex semantic retrieval
 │   ├── router.py          # Intelligent Router: concurrent synthesis of both engines

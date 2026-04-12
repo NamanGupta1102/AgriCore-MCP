@@ -15,6 +15,50 @@ except ImportError:
 # Cosine similarity scores from the retriever; drop weak matches to reduce irrelevant chunks.
 MIN_RETRIEVAL_SCORE = 0.18
 
+# Client tools often send values like "full_sun"; guidelines use "direct", "bright_indirect", "all", etc.
+# ExactMatchFilter on a single string excluded every row and LanceDB threw "query results are empty".
+_LIGHT_LEVEL_SYNONYMS: Dict[str, List[str]] = {
+    "full_sun": ["full_sun", "direct"],
+    "fullsun": ["full_sun", "direct"],
+    "direct": ["direct", "full_sun"],
+    "direct_sun": ["direct", "full_sun"],
+    "sun": ["direct", "full_sun"],
+    "bright_indirect": ["bright_indirect", "indirect"],
+    "indirect": ["indirect", "bright_indirect"],
+    "low": ["low", "shade"],
+    "shade": ["shade", "low"],
+    "partial_shade": ["partial_shade", "part_shade", "bright_indirect"],
+    "part_shade": ["part_shade", "partial_shade", "bright_indirect"],
+}
+
+
+def _expand_light_levels_for_filter(value: Any) -> Optional[List[str]]:
+    """
+    Map caller light_level strings to a list for MetadataFilter IN, always including corpus tag \"all\".
+    Returns None to skip the light_levels filter (match any light metadata).
+    """
+    if value is None:
+        return None
+    if isinstance(value, list):
+        merged: List[str] = []
+        for v in value:
+            part = _expand_light_levels_for_filter(v)
+            if part is None:
+                return None
+            merged.extend(part)
+        return list(dict.fromkeys(merged))
+    if not isinstance(value, str):
+        return None
+    raw = value.strip()
+    if not raw:
+        return None
+    norm = raw.lower().replace(" ", "_").replace("-", "_")
+    if norm in ("all", "any", "unspecified"):
+        return None
+    base = list(dict.fromkeys(_LIGHT_LEVEL_SYNONYMS.get(norm, [raw])))
+    return list(dict.fromkeys(base + ["all"]))
+
+
 class RagEngine:
     """
     Engine Beta (Semantic RAG)
@@ -85,6 +129,13 @@ class RagEngine:
         filters = []
         if metadata_filters:
             for key, value in metadata_filters.items():
+                if key == "light_levels":
+                    expanded = _expand_light_levels_for_filter(value)
+                    if expanded:
+                        filters.append(
+                            MetadataFilter(key=key, value=expanded, operator=FilterOperator.IN)
+                        )
+                    continue
                 if isinstance(value, list) and value:
                     filters.append(MetadataFilter(key=key, value=value, operator=FilterOperator.IN))
                 elif isinstance(value, str):
