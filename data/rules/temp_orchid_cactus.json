@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_orchid_cactus",
+  "name": "Orchid cactus Temperature Constraints",
+  "target_plant": "orchid cactus",
+  "category": "temperature",
+  "description": "Ensures Orchid cactus is kept within its safe temperature range (41\u00b0F - 89.6\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          41
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          89.6
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Orchid cactus.",
+  "response_fail": "CRITICAL: Orchid cactus requires temperature between 41\u00b0F and 89.6\u00b0F."
+}

@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_rabbits_foot",
+  "name": "Rabbits foot Temperature Constraints",
+  "target_plant": "rabbits foot",
+  "category": "temperature",
+  "description": "Ensures Rabbits foot is kept within its safe temperature range (50\u00b0F - 77\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          77
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Rabbits foot.",
+  "response_fail": "CRITICAL: Rabbits foot requires temperature between 50\u00b0F and 77\u00b0F."
+}

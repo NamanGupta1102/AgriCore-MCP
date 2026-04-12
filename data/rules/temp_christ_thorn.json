@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_christ_thorn",
+  "name": "Christ thorn Temperature Constraints",
+  "target_plant": "christ thorn",
+  "category": "temperature",
+  "description": "Ensures Christ thorn is kept within its safe temperature range (53.6\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Christ thorn.",
+  "response_fail": "CRITICAL: Christ thorn requires temperature between 53.6\u00b0F and 95\u00b0F."
+}

@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_vriesea_ginger",
+  "name": "Vriesea Ginger Temperature Constraints",
+  "target_plant": "vriesea ginger",
+  "category": "temperature",
+  "description": "Ensures Vriesea Ginger is kept within its safe temperature range (59\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          59
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Vriesea Ginger.",
+  "response_fail": "CRITICAL: Vriesea Ginger requires temperature between 59\u00b0F and 82.4\u00b0F."
+}

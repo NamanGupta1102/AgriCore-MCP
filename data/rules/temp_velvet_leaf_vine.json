@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_velvet_leaf_vine",
+  "name": "Velvet leaf vine Temperature Constraints",
+  "target_plant": "velvet leaf vine",
+  "category": "temperature",
+  "description": "Ensures Velvet leaf vine is kept within its safe temperature range (64.4\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          64.4
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Velvet leaf vine.",
+  "response_fail": "CRITICAL: Velvet leaf vine requires temperature between 64.4\u00b0F and 82.4\u00b0F."
+}

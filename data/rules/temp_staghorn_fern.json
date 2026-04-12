@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_staghorn_fern",
+  "name": "Staghorn fern Temperature Constraints",
+  "target_plant": "staghorn fern",
+  "category": "temperature",
+  "description": "Ensures Staghorn fern is kept within its safe temperature range (41\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          41
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Staghorn fern.",
+  "response_fail": "CRITICAL: Staghorn fern requires temperature between 41\u00b0F and 20\u00b0F."
+}

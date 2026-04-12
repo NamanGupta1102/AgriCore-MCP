@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_vriesea_splendens",
+  "name": "Vriesea splendens Temperature Constraints",
+  "target_plant": "vriesea splendens",
+  "category": "temperature",
+  "description": "Ensures Vriesea splendens is kept within its safe temperature range (59\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          59
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Vriesea splendens.",
+  "response_fail": "CRITICAL: Vriesea splendens requires temperature between 59\u00b0F and 82.4\u00b0F."
+}

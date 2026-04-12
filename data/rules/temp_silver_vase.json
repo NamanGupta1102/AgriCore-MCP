@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_silver_vase",
+  "name": "Silver vase Temperature Constraints",
+  "target_plant": "silver vase",
+  "category": "temperature",
+  "description": "Ensures Silver vase is kept within its safe temperature range (53.6\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Silver vase.",
+  "response_fail": "CRITICAL: Silver vase requires temperature between 53.6\u00b0F and 20\u00b0F."
+}

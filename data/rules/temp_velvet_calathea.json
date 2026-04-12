@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_velvet_calathea",
+  "name": "Velvet Calathea Temperature Constraints",
+  "target_plant": "velvet calathea",
+  "category": "temperature",
+  "description": "Ensures Velvet Calathea is kept within its safe temperature range (50\u00b0F - 77\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          77
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Velvet Calathea.",
+  "response_fail": "CRITICAL: Velvet Calathea requires temperature between 50\u00b0F and 77\u00b0F."
+}

@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_neoregelia_victoria_pink",
+  "name": "Neoregelia Victoria Pink Temperature Constraints",
+  "target_plant": "neoregelia victoria pink",
+  "category": "temperature",
+  "description": "Ensures Neoregelia Victoria Pink is kept within its safe temperature range (53.6\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Neoregelia Victoria Pink.",
+  "response_fail": "CRITICAL: Neoregelia Victoria Pink requires temperature between 53.6\u00b0F and 20\u00b0F."
+}

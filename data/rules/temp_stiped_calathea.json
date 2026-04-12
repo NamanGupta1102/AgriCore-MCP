@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_stiped_calathea",
+  "name": "Stiped calathea Temperature Constraints",
+  "target_plant": "stiped calathea",
+  "category": "temperature",
+  "description": "Ensures Stiped calathea is kept within its safe temperature range (50\u00b0F - 77\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          77
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Stiped calathea.",
+  "response_fail": "CRITICAL: Stiped calathea requires temperature between 50\u00b0F and 77\u00b0F."
+}

@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_miniature_fishtail",
+  "name": "Miniature fishtail Temperature Constraints",
+  "target_plant": "miniature fishtail",
+  "category": "temperature",
+  "description": "Ensures Miniature fishtail is kept within its safe temperature range (50\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Miniature fishtail.",
+  "response_fail": "CRITICAL: Miniature fishtail requires temperature between 50\u00b0F and 20\u00b0F."
+}

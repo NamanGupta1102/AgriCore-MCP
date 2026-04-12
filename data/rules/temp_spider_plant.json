@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_spider_plant",
+  "name": "Spider plant Temperature Constraints",
+  "target_plant": "spider plant",
+  "category": "temperature",
+  "description": "Ensures Spider plant is kept within its safe temperature range (41\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          41
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Spider plant.",
+  "response_fail": "CRITICAL: Spider plant requires temperature between 41\u00b0F and 82.4\u00b0F."
+}

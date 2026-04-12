@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_cryptanthus_rose_eliane",
+  "name": "Cryptanthus Rose Eliane Temperature Constraints",
+  "target_plant": "cryptanthus rose eliane",
+  "category": "temperature",
+  "description": "Ensures Cryptanthus Rose Eliane is kept within its safe temperature range (50\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Cryptanthus Rose Eliane.",
+  "response_fail": "CRITICAL: Cryptanthus Rose Eliane requires temperature between 50\u00b0F and 82.4\u00b0F."
+}

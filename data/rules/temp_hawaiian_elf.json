@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_hawaiian_elf",
+  "name": "Hawaiian elf Temperature Constraints",
+  "target_plant": "hawaiian elf",
+  "category": "temperature",
+  "description": "Ensures Hawaiian elf is kept within its safe temperature range (53.6\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Hawaiian elf.",
+  "response_fail": "CRITICAL: Hawaiian elf requires temperature between 53.6\u00b0F and 20\u00b0F."
+}

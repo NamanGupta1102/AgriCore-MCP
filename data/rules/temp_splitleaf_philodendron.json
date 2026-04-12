@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_splitleaf_philodendron",
+  "name": "Splitleaf Philodendron Temperature Constraints",
+  "target_plant": "splitleaf philodendron",
+  "category": "temperature",
+  "description": "Ensures Splitleaf Philodendron is kept within its safe temperature range (53.6\u00b0F - 89.6\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          89.6
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Splitleaf Philodendron.",
+  "response_fail": "CRITICAL: Splitleaf Philodendron requires temperature between 53.6\u00b0F and 89.6\u00b0F."
+}

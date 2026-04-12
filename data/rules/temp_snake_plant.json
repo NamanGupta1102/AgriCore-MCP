@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_snake_plant",
+  "name": "Snake plant Temperature Constraints",
+  "target_plant": "snake plant",
+  "category": "temperature",
+  "description": "Ensures Snake plant is kept within its safe temperature range (50\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Snake plant.",
+  "response_fail": "CRITICAL: Snake plant requires temperature between 50\u00b0F and 95\u00b0F."
+}

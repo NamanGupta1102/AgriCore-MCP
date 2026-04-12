@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_tailflower",
+  "name": "Tailflower Temperature Constraints",
+  "target_plant": "tailflower",
+  "category": "temperature",
+  "description": "Ensures Tailflower is kept within its safe temperature range (64.4\u00b0F - 71.6\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          64.4
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          71.6
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Tailflower.",
+  "response_fail": "CRITICAL: Tailflower requires temperature between 64.4\u00b0F and 71.6\u00b0F."
+}

@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_burro_tail",
+  "name": "Burro tail Temperature Constraints",
+  "target_plant": "burro tail",
+  "category": "temperature",
+  "description": "Ensures Burro tail is kept within its safe temperature range (46.4\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          46.4
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Burro tail.",
+  "response_fail": "CRITICAL: Burro tail requires temperature between 46.4\u00b0F and 95\u00b0F."
+}

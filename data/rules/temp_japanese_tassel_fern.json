@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_japanese_tassel_fern",
+  "name": "Japanese tassel fern Temperature Constraints",
+  "target_plant": "japanese tassel fern",
+  "category": "temperature",
+  "description": "Ensures Japanese tassel fern is kept within its safe temperature range (23\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          23
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Japanese tassel fern.",
+  "response_fail": "CRITICAL: Japanese tassel fern requires temperature between 23\u00b0F and 82.4\u00b0F."
+}

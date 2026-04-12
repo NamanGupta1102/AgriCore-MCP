@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_willow_fig_tree",
+  "name": "Willow fig tree Temperature Constraints",
+  "target_plant": "willow fig tree",
+  "category": "temperature",
+  "description": "Ensures Willow fig tree is kept within its safe temperature range (50\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Willow fig tree.",
+  "response_fail": "CRITICAL: Willow fig tree requires temperature between 50\u00b0F and 20\u00b0F."
+}

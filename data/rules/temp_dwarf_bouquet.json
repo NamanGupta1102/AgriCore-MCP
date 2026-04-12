@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_dwarf_bouquet",
+  "name": "Dwarf bouquet Temperature Constraints",
+  "target_plant": "dwarf bouquet",
+  "category": "temperature",
+  "description": "Ensures Dwarf bouquet is kept within its safe temperature range (50\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Dwarf bouquet.",
+  "response_fail": "CRITICAL: Dwarf bouquet requires temperature between 50\u00b0F and 20\u00b0F."
+}

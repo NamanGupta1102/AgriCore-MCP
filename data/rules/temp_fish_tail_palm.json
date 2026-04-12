@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_fish_tail_palm",
+  "name": "Fish tail palm Temperature Constraints",
+  "target_plant": "fish tail palm",
+  "category": "temperature",
+  "description": "Ensures Fish tail palm is kept within its safe temperature range (50\u00b0F - 77\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          77
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Fish tail palm.",
+  "response_fail": "CRITICAL: Fish tail palm requires temperature between 50\u00b0F and 77\u00b0F."
+}

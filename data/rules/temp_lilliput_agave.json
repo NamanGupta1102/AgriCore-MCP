@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_lilliput_agave",
+  "name": "Lilliput Agave Temperature Constraints",
+  "target_plant": "lilliput agave",
+  "category": "temperature",
+  "description": "Ensures Lilliput Agave is kept within its safe temperature range (53.6\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Lilliput Agave.",
+  "response_fail": "CRITICAL: Lilliput Agave requires temperature between 53.6\u00b0F and 95\u00b0F."
+}

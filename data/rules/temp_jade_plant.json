@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_jade_plant",
+  "name": "Jade Plant Temperature Constraints",
+  "target_plant": "jade plant",
+  "category": "temperature",
+  "description": "Ensures Jade Plant is kept within its safe temperature range (55\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          55
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Jade Plant.",
+  "response_fail": "CRITICAL: Jade Plant requires temperature between 55\u00b0F and 95\u00b0F."
+}

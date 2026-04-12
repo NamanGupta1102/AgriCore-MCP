@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_pellaea_falcata",
+  "name": "Pellaea falcata Temperature Constraints",
+  "target_plant": "pellaea falcata",
+  "category": "temperature",
+  "description": "Ensures Pellaea falcata is kept within its safe temperature range (53.6\u00b0F - 77\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          77
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Pellaea falcata.",
+  "response_fail": "CRITICAL: Pellaea falcata requires temperature between 53.6\u00b0F and 77\u00b0F."
+}

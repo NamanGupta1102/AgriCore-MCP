@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_monster_cactus",
+  "name": "Monster cactus Temperature Constraints",
+  "target_plant": "monster cactus",
+  "category": "temperature",
+  "description": "Ensures Monster cactus is kept within its safe temperature range (41\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          41
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Monster cactus.",
+  "response_fail": "CRITICAL: Monster cactus requires temperature between 41\u00b0F and 95\u00b0F."
+}

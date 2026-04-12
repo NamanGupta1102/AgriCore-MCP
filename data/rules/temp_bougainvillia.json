@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_bougainvillia",
+  "name": "Bougainvillia Temperature Constraints",
+  "target_plant": "bougainvillia",
+  "category": "temperature",
+  "description": "Ensures Bougainvillia is kept within its safe temperature range (50\u00b0F - 89.6\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          89.6
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Bougainvillia.",
+  "response_fail": "CRITICAL: Bougainvillia requires temperature between 50\u00b0F and 89.6\u00b0F."
+}

@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_fernleaf_philodendron",
+  "name": "Fernleaf Philodendron Temperature Constraints",
+  "target_plant": "fernleaf philodendron",
+  "category": "temperature",
+  "description": "Ensures Fernleaf Philodendron is kept within its safe temperature range (64.4\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          64.4
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Fernleaf Philodendron.",
+  "response_fail": "CRITICAL: Fernleaf Philodendron requires temperature between 64.4\u00b0F and 82.4\u00b0F."
+}

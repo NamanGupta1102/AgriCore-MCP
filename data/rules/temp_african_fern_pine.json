@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_african_fern_pine",
+  "name": "African fern pine Temperature Constraints",
+  "target_plant": "african fern pine",
+  "category": "temperature",
+  "description": "Ensures African fern pine is kept within its safe temperature range (50\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for African fern pine.",
+  "response_fail": "CRITICAL: African fern pine requires temperature between 50\u00b0F and 20\u00b0F."
+}

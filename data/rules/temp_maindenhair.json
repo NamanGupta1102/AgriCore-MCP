@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_maindenhair",
+  "name": "Maindenhair Temperature Constraints",
+  "target_plant": "maindenhair",
+  "category": "temperature",
+  "description": "Ensures Maindenhair is kept within its safe temperature range (53.6\u00b0F - 86\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          86
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Maindenhair.",
+  "response_fail": "CRITICAL: Maindenhair requires temperature between 53.6\u00b0F and 86\u00b0F."
+}

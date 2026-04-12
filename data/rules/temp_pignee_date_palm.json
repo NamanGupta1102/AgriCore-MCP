@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_pignee_date_palm",
+  "name": "Pignee Date palm Temperature Constraints",
+  "target_plant": "pignee date palm",
+  "category": "temperature",
+  "description": "Ensures Pignee Date palm is kept within its safe temperature range (46.4\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          46.4
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Pignee Date palm.",
+  "response_fail": "CRITICAL: Pignee Date palm requires temperature between 46.4\u00b0F and 82.4\u00b0F."
+}

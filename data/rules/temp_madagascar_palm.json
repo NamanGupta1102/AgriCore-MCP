@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_madagascar_palm",
+  "name": "Madagascar Palm Temperature Constraints",
+  "target_plant": "madagascar palm",
+  "category": "temperature",
+  "description": "Ensures Madagascar Palm is kept within its safe temperature range (46.4\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          46.4
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Madagascar Palm.",
+  "response_fail": "CRITICAL: Madagascar Palm requires temperature between 46.4\u00b0F and 95\u00b0F."
+}

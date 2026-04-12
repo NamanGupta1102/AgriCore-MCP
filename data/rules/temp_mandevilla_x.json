@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_mandevilla_x",
+  "name": "Mandevilla X Temperature Constraints",
+  "target_plant": "mandevilla x",
+  "category": "temperature",
+  "description": "Ensures Mandevilla X is kept within its safe temperature range (50\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Mandevilla X.",
+  "response_fail": "CRITICAL: Mandevilla X requires temperature between 50\u00b0F and 20\u00b0F."
+}

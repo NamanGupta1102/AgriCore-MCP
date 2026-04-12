@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_baby_rubber_plant",
+  "name": "Baby rubber plant Temperature Constraints",
+  "target_plant": "baby rubber plant",
+  "category": "temperature",
+  "description": "Ensures Baby rubber plant is kept within its safe temperature range (50\u00b0F - 89.6\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          89.6
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Baby rubber plant.",
+  "response_fail": "CRITICAL: Baby rubber plant requires temperature between 50\u00b0F and 89.6\u00b0F."
+}

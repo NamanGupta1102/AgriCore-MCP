@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_spiny_licuala_palm",
+  "name": "Spiny licuala palm Temperature Constraints",
+  "target_plant": "spiny licuala palm",
+  "category": "temperature",
+  "description": "Ensures Spiny licuala palm is kept within its safe temperature range (59\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          59
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Spiny licuala palm.",
+  "response_fail": "CRITICAL: Spiny licuala palm requires temperature between 59\u00b0F and 20\u00b0F."
+}

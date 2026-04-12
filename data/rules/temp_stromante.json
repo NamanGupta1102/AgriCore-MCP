@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_stromante",
+  "name": "Stromante Temperature Constraints",
+  "target_plant": "stromante",
+  "category": "temperature",
+  "description": "Ensures Stromante is kept within its safe temperature range (50\u00b0F - 77\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          77
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Stromante.",
+  "response_fail": "CRITICAL: Stromante requires temperature between 50\u00b0F and 77\u00b0F."
+}

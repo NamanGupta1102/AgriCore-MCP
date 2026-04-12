@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_blue_agave",
+  "name": "Blue Agave Temperature Constraints",
+  "target_plant": "blue agave",
+  "category": "temperature",
+  "description": "Ensures Blue Agave is kept within its safe temperature range (53.6\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Blue Agave.",
+  "response_fail": "CRITICAL: Blue Agave requires temperature between 53.6\u00b0F and 95\u00b0F."
+}

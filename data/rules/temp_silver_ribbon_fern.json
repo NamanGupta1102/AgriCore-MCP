@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_silver_ribbon_fern",
+  "name": "Silver Ribbon Fern Temperature Constraints",
+  "target_plant": "silver ribbon fern",
+  "category": "temperature",
+  "description": "Ensures Silver Ribbon Fern is kept within its safe temperature range (53.6\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Silver Ribbon Fern.",
+  "response_fail": "CRITICAL: Silver Ribbon Fern requires temperature between 53.6\u00b0F and 82.4\u00b0F."
+}

@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_giant_candelabra_tree",
+  "name": "Giant Candelabra tree Temperature Constraints",
+  "target_plant": "giant candelabra tree",
+  "category": "temperature",
+  "description": "Ensures Giant Candelabra tree is kept within its safe temperature range (53.6\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Giant Candelabra tree.",
+  "response_fail": "CRITICAL: Giant Candelabra tree requires temperature between 53.6\u00b0F and 95\u00b0F."
+}

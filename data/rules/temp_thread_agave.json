@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_thread_agave",
+  "name": "Thread Agave Temperature Constraints",
+  "target_plant": "thread agave",
+  "category": "temperature",
+  "description": "Ensures Thread Agave is kept within its safe temperature range (41\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          41
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Thread Agave.",
+  "response_fail": "CRITICAL: Thread Agave requires temperature between 41\u00b0F and 95\u00b0F."
+}

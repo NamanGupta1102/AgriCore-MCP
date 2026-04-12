@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_japanese_aralia",
+  "name": "Japanese Aralia Temperature Constraints",
+  "target_plant": "japanese aralia",
+  "category": "temperature",
+  "description": "Ensures Japanese Aralia is kept within its safe temperature range (46.4\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          46.4
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Japanese Aralia.",
+  "response_fail": "CRITICAL: Japanese Aralia requires temperature between 46.4\u00b0F and 82.4\u00b0F."
+}

@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_chicken_gizard_aralia",
+  "name": "Chicken gizard aralia Temperature Constraints",
+  "target_plant": "chicken gizard aralia",
+  "category": "temperature",
+  "description": "Ensures Chicken gizard aralia is kept within its safe temperature range (53.6\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Chicken gizard aralia.",
+  "response_fail": "CRITICAL: Chicken gizard aralia requires temperature between 53.6\u00b0F and 20\u00b0F."
+}

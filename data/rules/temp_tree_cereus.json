@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_tree_cereus",
+  "name": "Tree Cereus Temperature Constraints",
+  "target_plant": "tree cereus",
+  "category": "temperature",
+  "description": "Ensures Tree Cereus is kept within its safe temperature range (41\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          41
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Tree Cereus.",
+  "response_fail": "CRITICAL: Tree Cereus requires temperature between 41\u00b0F and 95\u00b0F."
+}

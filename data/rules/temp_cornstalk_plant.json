@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_cornstalk_plant",
+  "name": "Cornstalk plant Temperature Constraints",
+  "target_plant": "cornstalk plant",
+  "category": "temperature",
+  "description": "Ensures Cornstalk plant is kept within its safe temperature range (50\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Cornstalk plant.",
+  "response_fail": "CRITICAL: Cornstalk plant requires temperature between 50\u00b0F and 20\u00b0F."
+}

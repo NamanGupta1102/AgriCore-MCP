@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_malaysian_dracaena",
+  "name": "Malaysian Dracaena Temperature Constraints",
+  "target_plant": "malaysian dracaena",
+  "category": "temperature",
+  "description": "Ensures Malaysian Dracaena is kept within its safe temperature range (53.6\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Malaysian Dracaena.",
+  "response_fail": "CRITICAL: Malaysian Dracaena requires temperature between 53.6\u00b0F and 20\u00b0F."
+}

@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_ming_aralia",
+  "name": "Ming Aralia Temperature Constraints",
+  "target_plant": "ming aralia",
+  "category": "temperature",
+  "description": "Ensures Ming Aralia is kept within its safe temperature range (53.6\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Ming Aralia.",
+  "response_fail": "CRITICAL: Ming Aralia requires temperature between 53.6\u00b0F and 20\u00b0F."
+}

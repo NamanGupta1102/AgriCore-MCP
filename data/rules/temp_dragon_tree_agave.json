@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_dragon_tree_agave",
+  "name": "Dragon tree Agave Temperature Constraints",
+  "target_plant": "dragon tree agave",
+  "category": "temperature",
+  "description": "Ensures Dragon tree Agave is kept within its safe temperature range (41\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          41
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Dragon tree Agave.",
+  "response_fail": "CRITICAL: Dragon tree Agave requires temperature between 41\u00b0F and 95\u00b0F."
+}

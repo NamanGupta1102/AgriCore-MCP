@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_spindle_palm",
+  "name": "Spindle palm Temperature Constraints",
+  "target_plant": "spindle palm",
+  "category": "temperature",
+  "description": "Ensures Spindle palm is kept within its safe temperature range (50\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Spindle palm.",
+  "response_fail": "CRITICAL: Spindle palm requires temperature between 50\u00b0F and 95\u00b0F."
+}

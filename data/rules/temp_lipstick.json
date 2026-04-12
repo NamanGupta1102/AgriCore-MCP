@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_lipstick",
+  "name": "Lipstick Temperature Constraints",
+  "target_plant": "lipstick",
+  "category": "temperature",
+  "description": "Ensures Lipstick is kept within its safe temperature range (57.2\u00b0F - 89.6\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          57.2
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          89.6
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Lipstick.",
+  "response_fail": "CRITICAL: Lipstick requires temperature between 57.2\u00b0F and 89.6\u00b0F."
+}

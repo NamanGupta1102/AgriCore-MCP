@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_lisa_dracaena",
+  "name": "Lisa Dracaena Temperature Constraints",
+  "target_plant": "lisa dracaena",
+  "category": "temperature",
+  "description": "Ensures Lisa Dracaena is kept within its safe temperature range (50\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Lisa Dracaena.",
+  "response_fail": "CRITICAL: Lisa Dracaena requires temperature between 50\u00b0F and 20\u00b0F."
+}

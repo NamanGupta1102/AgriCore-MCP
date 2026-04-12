@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_birdnest_sansevieria",
+  "name": "Birdnest sansevieria Temperature Constraints",
+  "target_plant": "birdnest sansevieria",
+  "category": "temperature",
+  "description": "Ensures Birdnest sansevieria is kept within its safe temperature range (50\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Birdnest sansevieria.",
+  "response_fail": "CRITICAL: Birdnest sansevieria requires temperature between 50\u00b0F and 95\u00b0F."
+}

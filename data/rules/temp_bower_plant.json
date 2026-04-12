@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_bower_plant",
+  "name": "Bower plant Temperature Constraints",
+  "target_plant": "bower plant",
+  "category": "temperature",
+  "description": "Ensures Bower plant is kept within its safe temperature range (46.4\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          46.4
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Bower plant.",
+  "response_fail": "CRITICAL: Bower plant requires temperature between 46.4\u00b0F and 82.4\u00b0F."
+}

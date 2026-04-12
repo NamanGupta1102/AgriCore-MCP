@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_variegated_euphorbia",
+  "name": "Variegated Euphorbia Temperature Constraints",
+  "target_plant": "variegated euphorbia",
+  "category": "temperature",
+  "description": "Ensures Variegated Euphorbia is kept within its safe temperature range (53.6\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Variegated Euphorbia.",
+  "response_fail": "CRITICAL: Variegated Euphorbia requires temperature between 53.6\u00b0F and 95\u00b0F."
+}

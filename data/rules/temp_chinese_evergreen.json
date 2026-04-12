@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_chinese_evergreen",
+  "name": "Chinese Evergreen Temperature Constraints",
+  "target_plant": "chinese evergreen",
+  "category": "temperature",
+  "description": "Ensures Chinese Evergreen is kept within its safe temperature range (64.4\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          64.4
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Chinese Evergreen.",
+  "response_fail": "CRITICAL: Chinese Evergreen requires temperature between 64.4\u00b0F and 82.4\u00b0F."
+}

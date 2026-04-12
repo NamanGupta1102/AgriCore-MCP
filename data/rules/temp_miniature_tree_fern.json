@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_miniature_tree_fern",
+  "name": "Miniature tree fern Temperature Constraints",
+  "target_plant": "miniature tree fern",
+  "category": "temperature",
+  "description": "Ensures Miniature tree fern is kept within its safe temperature range (50\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Miniature tree fern.",
+  "response_fail": "CRITICAL: Miniature tree fern requires temperature between 50\u00b0F and 20\u00b0F."
+}

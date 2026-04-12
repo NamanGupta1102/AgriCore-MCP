@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_china_doll",
+  "name": "China doll Temperature Constraints",
+  "target_plant": "china doll",
+  "category": "temperature",
+  "description": "Ensures China doll is kept within its safe temperature range (46.4\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          46.4
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for China doll.",
+  "response_fail": "CRITICAL: China doll requires temperature between 46.4\u00b0F and 82.4\u00b0F."
+}

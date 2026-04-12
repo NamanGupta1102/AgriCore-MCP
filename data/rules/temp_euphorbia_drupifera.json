@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_euphorbia_drupifera",
+  "name": "Euphorbia drupifera Temperature Constraints",
+  "target_plant": "euphorbia drupifera",
+  "category": "temperature",
+  "description": "Ensures Euphorbia drupifera is kept within its safe temperature range (53.6\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Euphorbia drupifera.",
+  "response_fail": "CRITICAL: Euphorbia drupifera requires temperature between 53.6\u00b0F and 95\u00b0F."
+}

@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_false_aralia",
+  "name": "False aralia Temperature Constraints",
+  "target_plant": "false aralia",
+  "category": "temperature",
+  "description": "Ensures False aralia is kept within its safe temperature range (53.6\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for False aralia.",
+  "response_fail": "CRITICAL: False aralia requires temperature between 53.6\u00b0F and 82.4\u00b0F."
+}

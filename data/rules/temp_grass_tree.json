@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_grass_tree",
+  "name": "Grass tree Temperature Constraints",
+  "target_plant": "grass tree",
+  "category": "temperature",
+  "description": "Ensures Grass tree is kept within its safe temperature range (53.6\u00b0F - 95\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          95
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Grass tree.",
+  "response_fail": "CRITICAL: Grass tree requires temperature between 53.6\u00b0F and 95\u00b0F."
+}

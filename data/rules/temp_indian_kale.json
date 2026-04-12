@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_indian_kale",
+  "name": " Indian kale Temperature Constraints",
+  "target_plant": " indian kale",
+  "category": "temperature",
+  "description": "Ensures  Indian kale is kept within its safe temperature range (53.6\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for  Indian kale.",
+  "response_fail": "CRITICAL:  Indian kale requires temperature between 53.6\u00b0F and 82.4\u00b0F."
+}

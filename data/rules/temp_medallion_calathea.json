@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_medallion_calathea",
+  "name": "Medallion Calathea Temperature Constraints",
+  "target_plant": "medallion calathea",
+  "category": "temperature",
+  "description": "Ensures Medallion Calathea is kept within its safe temperature range (50\u00b0F - 77\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          50
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          77
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Medallion Calathea.",
+  "response_fail": "CRITICAL: Medallion Calathea requires temperature between 50\u00b0F and 77\u00b0F."
+}

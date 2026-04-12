@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_white_pothos",
+  "name": "White Pothos Temperature Constraints",
+  "target_plant": "white pothos",
+  "category": "temperature",
+  "description": "Ensures White Pothos is kept within its safe temperature range (53.6\u00b0F - 20\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          20
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for White Pothos.",
+  "response_fail": "CRITICAL: White Pothos requires temperature between 53.6\u00b0F and 20\u00b0F."
+}

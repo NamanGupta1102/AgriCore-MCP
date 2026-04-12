@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_herringbone",
+  "name": "Herringbone Temperature Constraints",
+  "target_plant": "herringbone",
+  "category": "temperature",
+  "description": "Ensures Herringbone is kept within its safe temperature range (53.6\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Herringbone.",
+  "response_fail": "CRITICAL: Herringbone requires temperature between 53.6\u00b0F and 82.4\u00b0F."
+}

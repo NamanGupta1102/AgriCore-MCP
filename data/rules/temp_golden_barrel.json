@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_golden_barrel",
+  "name": "Golden Barrel Temperature Constraints",
+  "target_plant": "golden barrel",
+  "category": "temperature",
+  "description": "Ensures Golden Barrel is kept within its safe temperature range (41\u00b0F - 104\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          41
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          104
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Golden Barrel.",
+  "response_fail": "CRITICAL: Golden Barrel requires temperature between 41\u00b0F and 104\u00b0F."
+}

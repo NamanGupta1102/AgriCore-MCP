@@ -1,0 +1,29 @@
+{
+  "rule_id": "rule_temp_silver_lace_fern",
+  "name": "Silver Lace Fern Temperature Constraints",
+  "target_plant": "silver lace fern",
+  "category": "temperature",
+  "description": "Ensures Silver Lace Fern is kept within its safe temperature range (53.6\u00b0F - 82.4\u00b0F).",
+  "logic_evaluator": {
+    "and": [
+      {
+        ">=": [
+          {
+            "var": "room_temp_f"
+          },
+          53.6
+        ]
+      },
+      {
+        "<=": [
+          {
+            "var": "room_temp_f"
+          },
+          82.4
+        ]
+      }
+    ]
+  },
+  "response_pass": "Safe! Room temperature is optimal for Silver Lace Fern.",
+  "response_fail": "CRITICAL: Silver Lace Fern requires temperature between 53.6\u00b0F and 82.4\u00b0F."
+}
