@@ -1,12 +1,14 @@
 import os
 import logging
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
+
 try:
     import lancedb
     from llama_index.core import VectorStoreIndex, Document, Settings
     from llama_index.vector_stores.lancedb import LanceDBVectorStore
     from llama_index.embeddings.huggingface import HuggingFaceEmbedding
     from llama_index.core.vector_stores import ExactMatchFilter, MetadataFilters, MetadataFilter, FilterOperator
+
     LANCEDB_AVAILABLE = True
 except ImportError:
     LANCEDB_AVAILABLE = False
@@ -64,11 +66,12 @@ class RagEngine:
     Engine Beta (Semantic RAG)
     Handles localized knowledge retrieval with metadata filtering.
     """
+
     def __init__(self, db_dir: str = "data/.lancedb", table_name: str = "guidelines"):
         self.db_dir = db_dir
         self.table_name = table_name
         self.index = None
-        
+
         if LANCEDB_AVAILABLE:
             self._init_embedding_model()
             self._init_db()
@@ -76,7 +79,6 @@ class RagEngine:
     def _init_embedding_model(self):
         logging.info("Initializing HuggingFace embedding model: BAAI/bge-small-en-v1.5")
         try:
-            # We use an accurate, local model suitable for retrieval tasks
             embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
             Settings.embed_model = embed_model
         except Exception as e:
@@ -86,14 +88,13 @@ class RagEngine:
         """Connects to LanceDB or creates a mock table if none exists for testing."""
         if not os.path.exists(os.path.dirname(self.db_dir)):
             os.makedirs(os.path.dirname(self.db_dir), exist_ok=True)
-            
+
         try:
             self.db = lancedb.connect(self.db_dir)
             if self.table_name not in self.db.table_names():
                 logging.info(f"Table '{self.table_name}' not found. Initializing dummy data for testing.")
                 self._create_dummy_data()
-            
-            # Setup vector store connection
+
             self.vector_store = LanceDBVectorStore(uri=self.db_dir, table_name=self.table_name)
             self.index = VectorStoreIndex.from_vector_store(self.vector_store)
             logging.info("Engine Beta (Semantic RAG) initialized successfully.")
@@ -106,26 +107,42 @@ class RagEngine:
         docs = [
             Document(
                 text="Early blight (Alternaria solani) thrives in high humidity. Use copper fungicides every 7 days when humidity exceeds 80%. Ensure good airflow and remove lower leaves.",
-                metadata={"id": "guide_tomato_blight_ne_01", "plant_tags": "tomato", "light_levels": "bright_indirect", "category": "disease_management", "is_dummy": True}
+                metadata={
+                    "id": "guide_tomato_blight_ne_01",
+                    "plant_tags": "tomato",
+                    "light_levels": "bright_indirect",
+                    "category": "disease_management",
+                    "is_dummy": True,
+                },
             ),
             Document(
                 text="Companion planting: Plant basil near tomatoes to deter hornworms and whiteflies. This improves organic pest management and can subtly improve tomato flavor.",
-                metadata={"id": "guide_companion_planting_01", "plant_tags": "tomato", "light_levels": "all", "category": "companion_planting", "is_dummy": True}
+                metadata={
+                    "id": "guide_companion_planting_01",
+                    "plant_tags": "tomato",
+                    "light_levels": "all",
+                    "category": "companion_planting",
+                    "is_dummy": True,
+                },
             ),
             Document(
                 text="Corn requires rich soil with high nitrogen. Test soil prior to planting to ensure pH is between 5.8 and 7.0 for optimal germination and health.",
-                metadata={"id": "guide_corn_soil_ph", "plant_tags": "corn", "light_levels": "direct", "category": "soil_health", "is_dummy": True}
-            )
+                metadata={
+                    "id": "guide_corn_soil_ph",
+                    "plant_tags": "corn",
+                    "light_levels": "direct",
+                    "category": "soil_health",
+                    "is_dummy": True,
+                },
+            ),
         ]
         from llama_index.core import StorageContext
+
         vector_store = LanceDBVectorStore(uri=self.db_dir, table_name=self.table_name)
         storage_context = StorageContext.from_defaults(vector_store=vector_store)
         VectorStoreIndex.from_documents(docs, storage_context=storage_context)
 
-    def search(self, query: str, metadata_filters: Optional[Dict[str, Any]] = None, top_k: int = 3) -> str:
-        if not self.index or not LANCEDB_AVAILABLE:
-            return "### 📖 AGRICORE MCP: COMMUNITY GUIDELINES\nNo community guidelines are currently indexed or LanceDB is unavailable."
-            
+    def _build_mq_filters(self, metadata_filters: Optional[Dict[str, Any]]) -> Any:
         filters = []
         if metadata_filters:
             for key, value in metadata_filters.items():
@@ -140,38 +157,7 @@ class RagEngine:
                     filters.append(MetadataFilter(key=key, value=value, operator=FilterOperator.IN))
                 elif isinstance(value, str):
                     filters.append(ExactMatchFilter(key=key, value=value))
-                    
-        mq_filters = MetadataFilters(filters=filters) if filters else None
-        
-        try:
-            retriever = self.index.as_retriever(similarity_top_k=top_k, filters=mq_filters)
-            nodes = retriever.retrieve(query)
-
-            nodes = self._nodes_meeting_score_floor(nodes, top_k)
-            
-            if not nodes:
-                return (
-                    "### 📖 AGRICORE MCP: COMMUNITY GUIDELINES\n\n"
-                    f"No guidelines met the similarity threshold for query: '{query}'. "
-                    "Try rephrasing, removing strict filters, or broadening the topic."
-                )
-
-            result_str = "### 📖 AGRICORE MCP: COMMUNITY GUIDELINES\n\n"
-            
-            if any(node.metadata.get("is_dummy", False) for node in nodes):
-                result_str += "> [!WARNING]\n> ⚠️ UNVERIFIED DUMMY DATA FOR TESTING PURPOSES ONLY ⚠️\n\n"
-
-            for i, node in enumerate(nodes):
-                meta = node.metadata
-                source_id = meta.get("id", "Unknown")
-                light_level = meta.get("light_levels", "Unknown")
-                text = node.get_content().strip()
-                result_str += f"**Source {i+1} Retrieved:** (File: `{source_id}.md`) - Light: `{light_level}`\n> {text}\n\n"
-                
-            return result_str
-        except Exception as e:
-            logging.error(f"Semantic search failed: {e}")
-            return f"### 📖 AGRICORE MCP: COMMUNITY GUIDELINES\nFailed to traverse the vector bank: {str(e)}"
+        return MetadataFilters(filters=filters) if filters else None
 
     def _nodes_meeting_score_floor(self, nodes: List[Any], top_k: int) -> List[Any]:
         """Keep nodes whose retriever score clears MIN_RETRIEVAL_SCORE (higher = more similar)."""
@@ -185,3 +171,98 @@ class RagEngine:
             elif score >= MIN_RETRIEVAL_SCORE:
                 kept.append(n)
         return kept[:top_k]
+
+    def _retrieve_scored_nodes(
+        self, query: str, metadata_filters: Optional[Dict[str, Any]], top_k: int
+    ) -> Tuple[str, Any]:
+        """
+        Returns:
+            ('unavailable', None) — no index / LanceDB off
+            ('error', str) — retrieval exception message
+            ('ok', List[node]) — possibly empty after score floor
+        """
+        if not self.index or not LANCEDB_AVAILABLE:
+            return "unavailable", None
+        mq_filters = self._build_mq_filters(metadata_filters)
+        try:
+            retriever = self.index.as_retriever(similarity_top_k=top_k, filters=mq_filters)
+            nodes = retriever.retrieve(query)
+            nodes = self._nodes_meeting_score_floor(nodes, top_k)
+            return "ok", nodes
+        except Exception as e:
+            logging.error(f"Semantic search failed: {e}")
+            return "error", str(e)
+
+    @staticmethod
+    def _nodes_to_chunks(nodes: List[Any]) -> List[Dict[str, Any]]:
+        out: List[Dict[str, Any]] = []
+        for node in nodes:
+            meta = node.metadata or {}
+            score = getattr(node, "score", None)
+            out.append(
+                {
+                    "id": meta.get("id", "Unknown"),
+                    "light_levels": meta.get("light_levels", "Unknown"),
+                    "plant_tags": meta.get("plant_tags", ""),
+                    "category": meta.get("category", ""),
+                    "score": float(score) if score is not None else None,
+                    "text": node.get_content().strip(),
+                    "is_dummy": bool(meta.get("is_dummy", False)),
+                }
+            )
+        return out
+
+    def _markdown_unavailable(self) -> str:
+        return (
+            "### AGRICORE MCP: COMMUNITY GUIDELINES\n"
+            "No community guidelines are currently indexed or LanceDB is unavailable."
+        )
+
+    def _markdown_no_hits(self, query: str) -> str:
+        return (
+            "### AGRICORE MCP: COMMUNITY GUIDELINES\n\n"
+            f"No guidelines met the similarity threshold for query: '{query}'. "
+            "Try rephrasing, removing strict filters, or broadening the topic."
+        )
+
+    def _markdown_from_nodes(self, nodes: List[Any]) -> str:
+        result_str = "### AGRICORE MCP: COMMUNITY GUIDELINES\n\n"
+        if any(node.metadata.get("is_dummy", False) for node in nodes):
+            result_str += "> [!WARNING]\n> UNVERIFIED DUMMY DATA FOR TESTING PURPOSES ONLY\n\n"
+        for i, node in enumerate(nodes):
+            meta = node.metadata
+            source_id = meta.get("id", "Unknown")
+            light_level = meta.get("light_levels", "Unknown")
+            text = node.get_content().strip()
+            result_str += (
+                f"**Source {i+1} Retrieved:** (File: `{source_id}.md`) - Light: `{light_level}`\n> {text}\n\n"
+            )
+        return result_str
+
+    def search(self, query: str, metadata_filters: Optional[Dict[str, Any]] = None, top_k: int = 3) -> str:
+        status, data = self._retrieve_scored_nodes(query, metadata_filters, top_k)
+        if status == "unavailable":
+            return self._markdown_unavailable()
+        if status == "error":
+            return f"### AGRICORE MCP: COMMUNITY GUIDELINES\nFailed to traverse the vector bank: {data}"
+        nodes = data
+        if not nodes:
+            return self._markdown_no_hits(query)
+        return self._markdown_from_nodes(nodes)
+
+    def search_and_chunks(
+        self, query: str, metadata_filters: Optional[Dict[str, Any]] = None, top_k: int = 3
+    ) -> Tuple[str, List[Dict[str, Any]]]:
+        """Single retrieval pass: (markdown, JSON-serializable chunks)."""
+        status, data = self._retrieve_scored_nodes(query, metadata_filters, top_k)
+        if status == "unavailable":
+            return self._markdown_unavailable(), []
+        if status == "error":
+            return (
+                f"### AGRICORE MCP: COMMUNITY GUIDELINES\nFailed to traverse the vector bank: {data}",
+                [],
+            )
+        nodes: List[Any] = data
+        if not nodes:
+            return self._markdown_no_hits(query), []
+        return self._markdown_from_nodes(nodes), self._nodes_to_chunks(nodes)

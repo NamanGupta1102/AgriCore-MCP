@@ -2,7 +2,31 @@
 name = "agricore-mcp"
 version = "0.1.0"
 description = "An open-source MCP server providing community-driven agricultural knowledge to LLMs."
+readme = "README.md"
 requires-python = ">=3.11"
+dependencies = [
+    "mcp==1.14.0",
+    "starlette",
+    "uvicorn[standard]",
+    "json-logic-qubit",
+    "lancedb==0.30.0",
+    "llama-index==0.14.19",
+    "llama-index-core==0.14.19",
+    "llama-index-vector-stores-lancedb==0.5.0",
+    "llama-index-embeddings-huggingface==0.7.0",
+    "sentence-transformers==3.0.1",
+    "transformers==4.40.2",
+    "tokenizers>=0.19,<0.20",
+    "tiktoken",
+    "pydantic",
+    "pandas",
+    "PyYAML",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -11,7 +35,6 @@ where = ["src"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_functions = ["test_*"]
-# Suppress noisy third-party warnings during the test run
 filterwarnings = [
     "ignore::DeprecationWarning",
     "ignore::UserWarning",

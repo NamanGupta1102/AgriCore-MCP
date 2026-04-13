@@ -56,24 +56,22 @@ Static reference material is exposed as resources so agents can **ListResources*
 
 ### 2. Clone & Set Up Environment
 
-**Recommended (uv):**
+**Recommended (uv):** Dependencies and Python version are pinned in [`pyproject.toml`](pyproject.toml) and [`uv.lock`](uv.lock). The repo includes [`.python-version`](.python-version) (3.12) so `uv` picks the same runtime locally as in Docker.
 
 ```bash
 git clone https://github.com/NamanGupta1102/AgriCore-MCP
 cd AgriCore-MCP
 
-uv venv
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
-source .venv/bin/activate
+# Runtime dependencies only (creates/updates .venv from uv.lock)
+uv sync
 
-uv pip install -r requirements.txt
+# Include dev tools (e.g. pytest)
+uv sync --group dev
 ```
 
-**Classic venv + pip:** create `.venv`, activate it, then `pip install -r requirements.txt` as before.
+Optional: activate the venv (`source .venv/bin/activate` or `.venv\Scripts\activate`) or skip activation and use **`uv run`** for every command (e.g. `uv run pytest`, `uv run python main.py`).
 
-Use **`uv run`** to execute commands inside the project environment without activating the venv (e.g. `uv run pytest`, `uv run python main.py`).
+**Classic pip:** [`requirements.txt`](requirements.txt) is generated from the lockfile (`uv export --no-dev`) for `pip install -r requirements.txt` if you do not use uv.
 
 ### 3. Build the Vector Index
 
@@ -94,20 +92,25 @@ uv run python test_client.py
 **Local (SSE over HTTP, default `http://127.0.0.1:8000`):**
 
 ```bash
-# Recommended: root entry (Railway-compatible)
+# Recommended: root entry (Railway-compatible), using the uv-managed venv
+uv run python main.py
+
+# Equivalent after: uv sync && source .venv/bin/activate
 python main.py
 
 # Or run the module under src/ directly
-python src/server_main.py
+uv run python src/server_main.py
 # Or on Windows:
 start_server.bat
 ```
 
 Set **`PORT`** (default `8000`) and optional **`BIND_HOST`** (default `0.0.0.0`) for cloud. Health: **`GET /health`**. MCP SSE: **`GET /sse`**, messages: **`POST /messages/`**. Discovery hint: **`GET /.well-known/mcp`**.
 
+**Web playground (human demo):** With the server running, open **`/`** for a static HTML UI (dark theme) that explains AgriCore and calls **`POST /api/preview`** with JSON (`query`, optional `plant`, `light_level`, `top_k`, and optional Engine Alpha fields). This uses the same RAG and rules engines as the MCP tools; **MCP clients and agents should still use `/sse`**, not the preview API, for protocol compliance.
+
 ### Railway
 
-1. Use the included **`Dockerfile`** + **`railway.json`** (`builder: DOCKERFILE`). The image runs **`python src/build_index.py`** *after* the final `COPY`, so **`data/.lancedb`** is not wiped (Nixpacks alone ran a second `COPY . /app` after the index build and removed `.lancedb` because it is not in Git).
+1. Use the included **`Dockerfile`** + **`railway.json`** (`builder: DOCKERFILE`). The image uses **`uv sync --frozen`** from **`uv.lock`**, then runs **`python src/build_index.py`** *after* the final `COPY`, so **`data/.lancedb`** is not wiped (Nixpacks alone ran a second `COPY . /app` after the index build and removed `.lancedb` because it is not in Git).
 2. **Start:** `python main.py` — healthcheck **`/health`**.
 3. Ensure **`data/rules`** and **`data/guidelines`** are tracked in Git (your `.gitignore` may ignore `/data`; force-add or narrow ignores if deploys miss rules/guidelines).
 4. Use a plan with enough **RAM** for sentence-transformers + LanceDB (build and runtime; free tiers may OOM or be slow).
@@ -117,6 +120,7 @@ Set **`PORT`** (default `8000`) and optional **`BIND_HOST`** (default `0.0.0.0`)
 ## Running Tests
 
 ```bash
+uv sync --group dev   # once, if pytest is not installed yet
 uv run pytest -v
 ```
 
@@ -130,6 +134,7 @@ Tests are in `tests/`. Engine Beta tests require the embedding model download on
 AgriCore-MCP/
 ├── main.py                # Production/Railway entry — runs FastMCP SSE on PORT
 ├── railway.json           # Railway deploy: startCommand + /health check
+├── web/                   # Static playground UI (/, /assets/*) + same-origin /api/preview
 ├── src/
 │   ├── server_main.py     # MCP server entry — tools + reference resources
 │   ├── reference_catalog.py # Markdown for MCP resources (env keys, RAG metadata)
@@ -147,8 +152,10 @@ AgriCore-MCP/
 │   ├── test_alpha.py      # Engine Alpha unit tests
 │   └── test_beta.py       # Engine Beta unit tests
 ├── context/               # Project design documents and specifications
-├── requirements.txt       # Pinned Python dependencies
-├── pyproject.toml         # Package config and pytest settings
+├── .python-version        # Python pin for uv (matches Docker base image)
+├── pyproject.toml         # Project metadata, dependencies, pytest settings
+├── uv.lock                # Locked dependency versions (use with uv sync)
+├── requirements.txt       # pip fallback (generated: uv export --no-dev)
 └── test_client.py         # End-to-end demo script
 ```
 

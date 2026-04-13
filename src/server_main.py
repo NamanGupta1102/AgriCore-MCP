@@ -1,12 +1,12 @@
 import logging
 import os
-from typing import Annotated, Optional
+from typing import Annotated, Any, Optional
 
 from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 from pydantic import BaseModel, Field
 from starlette.requests import Request
-from starlette.responses import JSONResponse, Response
+from starlette.responses import FileResponse, JSONResponse, Response
 
 from rag_engine import RagEngine
 from reference_catalog import (
@@ -130,6 +130,9 @@ rag_engine_instance = RagEngine(
 # Initialize the Intelligent Router (Sprint 5: synthesis layer)
 router_instance = IntelligentRouter(rules_engine_instance, rag_engine_instance)
 
+_WEB_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "web"))
+
+
 @app.resource(
     "agricore://reference/index",
     title="AgriCore reference index",
@@ -175,6 +178,105 @@ async def well_known_mcp(_request: Request) -> Response:
             "transport": "sse",
             "sse_path": "/sse",
             "message_path": "/messages/",
+        }
+    )
+
+
+@app.custom_route("/", methods=["GET"])
+async def serve_playground(_request: Request) -> Response:
+    """Serve the static web playground (human demo; MCP agents should use /sse)."""
+    path = os.path.join(_WEB_ROOT, "index.html")
+    if not os.path.isfile(path):
+        return JSONResponse(
+            {"error": "Web playground not installed (missing web/index.html)."},
+            status_code=404,
+        )
+    return FileResponse(path)
+
+
+@app.custom_route("/assets/styles.css", methods=["GET"])
+async def serve_playground_css(_request: Request) -> Response:
+    path = os.path.join(_WEB_ROOT, "styles.css")
+    if not os.path.isfile(path):
+        return Response(status_code=404)
+    return FileResponse(path, media_type="text/css; charset=utf-8")
+
+
+@app.custom_route("/assets/app.js", methods=["GET"])
+async def serve_playground_js(_request: Request) -> Response:
+    path = os.path.join(_WEB_ROOT, "app.js")
+    if not os.path.isfile(path):
+        return Response(status_code=404)
+    return FileResponse(path, media_type="application/javascript; charset=utf-8")
+
+
+@app.custom_route("/api/preview", methods=["POST"])
+async def api_preview(request: Request) -> Response:
+    """
+    JSON API for the web playground: runs the same RAG (and optionally Engine Alpha)
+    as MCP tools without speaking the MCP protocol.
+    """
+    try:
+        body: dict[str, Any] = await request.json()
+    except Exception:
+        return JSONResponse({"error": "Invalid JSON body."}, status_code=400)
+
+    raw_query = body.get("query")
+    if raw_query is None or not str(raw_query).strip():
+        return JSONResponse({"error": "Field 'query' is required (non-empty string)."}, status_code=400)
+    query = str(raw_query).strip()
+
+    plant_slug = (body.get("target_plant") or body.get("plant") or "").strip()
+    rag_query = f"{query}\n\nPlant: {plant_slug}" if plant_slug else query
+
+    light_level = body.get("light_level")
+    extra_filters = body.get("metadata_filters")
+    combined: dict[str, Any] = {}
+    if isinstance(extra_filters, dict):
+        combined.update(extra_filters)
+    if light_level is not None and str(light_level).strip():
+        combined.setdefault("light_levels", str(light_level).strip())
+
+    top_k = body.get("top_k", 3)
+    try:
+        tk = int(top_k)
+    except (TypeError, ValueError):
+        tk = 3
+    tk = min(max(tk, 1), 20)
+
+    metadata_filters: Optional[dict] = combined if combined else None
+
+    try:
+        guidelines_md, chunks = rag_engine_instance.search_and_chunks(
+            rag_query, metadata_filters, top_k=tk
+        )
+    except Exception as e:
+        logging.exception("api_preview RAG failure")
+        return JSONResponse({"error": f"Retrieval failed: {e!s}"}, status_code=500)
+
+    hard_md: Optional[str] = None
+    action_category = body.get("action_category")
+    env_context = body.get("env_context")
+    if (
+        action_category
+        and isinstance(env_context, dict)
+        and plant_slug
+    ):
+        try:
+            hard_md = rules_engine_instance.evaluate(
+                str(action_category).strip(), plant_slug, env_context
+            )
+        except Exception as e:
+            logging.exception("api_preview rules failure")
+            return JSONResponse({"error": f"Rules evaluation failed: {e!s}"}, status_code=500)
+
+    return JSONResponse(
+        {
+            "query": query,
+            "rag_query": rag_query,
+            "hard_constraints_markdown": hard_md,
+            "guidelines_markdown": guidelines_md,
+            "chunks": chunks,
         }
     )
 

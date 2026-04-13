@@ -1,16 +1,8 @@
 @echo off
 echo =======================================
-echo Ensuring uv Virtual Environment exists...
+echo Syncing uv environment (uv.lock)...
 echo =======================================
-if not exist ".venv" (
-    uv venv
-)
-
-echo.
-echo =======================================
-echo Installing Dependencies with uv...
-echo =======================================
-uv pip install -r requirements.txt
+uv sync
 
 echo.
 echo =======================================

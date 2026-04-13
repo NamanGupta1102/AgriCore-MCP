@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgriCore — Playground</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="logo-wrap">
+        <span class="logo-mark">A</span>
+        <div>
+          <h1 class="logo-title">AgriCore</h1>
+          <p class="logo-sub">MCP · Hybrid agricultural intelligence</p>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#playground">Playground</a>
+        <a href="https://github.com/NamanGupta1102/AgriCore-MCP" rel="noopener noreferrer" target="_blank">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="about">
+        <div class="hero-glow"></div>
+        <p class="eyebrow">Model Context Protocol server</p>
+        <h2 class="hero-title">
+          Hard rules <span class="accent">and</span> community guidelines—without the hallucination soup.
+        </h2>
+        <p class="hero-lead">
+          AgriCore splits <strong>Engine Alpha</strong> (deterministic JSON-Logic thresholds) from
+          <strong>Engine Beta</strong> (semantic retrieval over curated Markdown). Agents connect via MCP over
+          SSE; this page is a human-friendly preview of what the vector index returns for a query.
+        </p>
+        <ul class="hero-points">
+          <li><span class="pill pill-alpha">Alpha</span> PASS/FAIL constraints from <code>data/rules</code></li>
+          <li><span class="pill pill-beta">Beta</span> LanceDB + embeddings over <code>data/guidelines</code></li>
+          <li><span class="pill pill-mcp">MCP</span> <code>GET /.well-known/mcp</code> · <code>/sse</code> · <code>POST /messages/</code></li>
+        </ul>
+      </section>
+
+      <section class="playground card-reveal" id="playground">
+        <div class="section-head">
+          <h2>Playground</h2>
+          <p class="muted">Runs the same retrieval as the server. Not a substitute for an MCP client in production agents.</p>
+        </div>
+
+        <form id="preview-form" class="preview-form">
+          <label class="field">
+            <span>Question / search query</span>
+            <textarea
+              name="query"
+              rows="3"
+              required
+              placeholder="e.g. How do I manage early blight on tomatoes in high humidity?"
+            ></textarea>
+          </label>
+
+          <div class="field-row">
+            <label class="field">
+              <span>Plant slug (optional)</span>
+              <input type="text" name="plant" placeholder="tomato, corn, …" autocomplete="off" />
+            </label>
+            <label class="field">
+              <span>Light level (optional)</span>
+              <select name="light_level">
+                <option value="">Any</option>
+                <option value="all">all</option>
+                <option value="direct">direct / full sun</option>
+                <option value="full_sun">full_sun</option>
+                <option value="bright_indirect">bright_indirect</option>
+                <option value="low">low / shade</option>
+                <option value="partial_shade">partial_shade</option>
+              </select>
+            </label>
+            <label class="field field-narrow">
+              <span>Top K</span>
+              <input type="number" name="top_k" min="1" max="20" value="3" />
+            </label>
+          </div>
+
+          <details class="advanced">
+            <summary>Engine Alpha (optional)</summary>
+            <p class="muted small">
+              If set, evaluates JSON rules for this <code>action_category</code> and plant slug above. Requires valid
+              <code>env_context</code> JSON.
+            </p>
+            <div class="field-row">
+              <label class="field">
+                <span>action_category</span>
+                <input type="text" name="action_category" placeholder="planting" autocomplete="off" />
+              </label>
+            </div>
+            <label class="field">
+              <span>env_context (JSON object)</span>
+              <textarea name="env_context" rows="4" placeholder='{"soil_temp_f": 55, "frost_risk": false}'></textarea>
+            </label>
+          </details>
+
+          <div class="form-actions">
+            <button type="submit" class="btn primary" id="submit-btn">
+              <span class="btn-label">Retrieve</span>
+              <span class="btn-spinner" hidden aria-hidden="true"></span>
+            </button>
+            <p id="error-banner" class="error-banner" hidden role="alert"></p>
+          </div>
+        </form>
+
+        <div id="results" class="results" hidden>
+          <div class="results-grid">
+            <article class="panel panel-alpha" id="panel-alpha" hidden>
+              <h3>Hard constraints (Alpha)</h3>
+              <pre class="panel-body" id="alpha-out"></pre>
+            </article>
+            <article class="panel panel-beta">
+              <h3>Retrieved guidelines (Beta)</h3>
+              <div class="panel-body chunks" id="chunks-out"></div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Open source · MIT · Railway-ready</p>
+    </footer>
+
+    <script src="/assets/app.js" defer></script>
+  </body>
+</html>
