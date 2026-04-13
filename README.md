@@ -161,6 +161,16 @@ AgriCore-MCP/
 
 ---
 
+## Dataset references
+
+Public Kaggle datasets the project may draw from or align with when expanding guidelines and care content (not bundled in-repo):
+
+- [Indoor house plants dataset with care instructions](https://www.kaggle.com/datasets/prakash27x/indoor-house-plants-dataset-with-care-instructions)
+- [Plants growth and care recommendations](https://www.kaggle.com/datasets/aribashafaqat/plants-growth-and-care-recommendations/data)
+- [Gardening Q and A](https://www.kaggle.com/datasets/gabriellaamorim/gardening-q-and-a)
+
+---
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add rules and guidelines.
