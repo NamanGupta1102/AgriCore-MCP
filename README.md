@@ -1,3 +1,5 @@
+Hosted demo: https://agricore-mcp-production.up.railway.app/
+
 # AgriCore MCP
 
 **An open-source Model Context Protocol (MCP) server that provides LLMs and autonomous agents with accurate, community-verified agricultural knowledge.**
