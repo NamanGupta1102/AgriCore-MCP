@@ -8,3 +8,4 @@ data/.lancedb/
 
 # Scratch / bulk imports (not the shipped corpus)
 data_pull/
+aws_stuff/
